@@ -1,0 +1,80 @@
+[gd_scene load_steps=5 format=3 uid="uid://bma623pnovfxf"]
+
+[ext_resource type="Script" path="res://scripts/camera_2d.gd" id="1_ubefp"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0odau"]
+size = Vector2(984, 64)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kj4fa"]
+size = Vector2(84, 519.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_uwb2k"]
+size = Vector2(83.5, 64)
+
+[node name="camview" type="Camera2D"]
+script = ExtResource("1_ubefp")
+
+[node name="moveNRegion" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="moveNRegion"]
+position = Vector2(0, 292)
+shape = SubResource("RectangleShape2D_0odau")
+
+[node name="moveSRegion" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="moveSRegion"]
+position = Vector2(0, -292)
+shape = SubResource("RectangleShape2D_0odau")
+
+[node name="moveWRegion" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="moveWRegion"]
+position = Vector2(-534, 0.5)
+shape = SubResource("RectangleShape2D_kj4fa")
+
+[node name="moveERegion" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="moveERegion"]
+position = Vector2(534, 0.75)
+shape = SubResource("RectangleShape2D_kj4fa")
+
+[node name="moveNWRegion" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="moveNWRegion"]
+position = Vector2(-533.75, -292)
+shape = SubResource("RectangleShape2D_uwb2k")
+
+[node name="moveSWRegion" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="moveSWRegion"]
+position = Vector2(-534, 292)
+shape = SubResource("RectangleShape2D_uwb2k")
+
+[node name="moveSERegion" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="moveSERegion"]
+position = Vector2(534, 292)
+shape = SubResource("RectangleShape2D_uwb2k")
+
+[node name="moveNERegion" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="moveNERegion"]
+position = Vector2(534, -292)
+shape = SubResource("RectangleShape2D_uwb2k")
+
+[connection signal="mouse_entered" from="moveNRegion" to="." method="_on_move_n_region_mouse_entered"]
+[connection signal="mouse_exited" from="moveNRegion" to="." method="_on_move_n_region_mouse_exited"]
+[connection signal="mouse_entered" from="moveSRegion" to="." method="_on_move_s_region_mouse_entered"]
+[connection signal="mouse_exited" from="moveSRegion" to="." method="_on_move_s_region_mouse_exited"]
+[connection signal="mouse_entered" from="moveWRegion" to="." method="_on_move_w_region_mouse_entered"]
+[connection signal="mouse_exited" from="moveWRegion" to="." method="_on_move_w_region_mouse_exited"]
+[connection signal="mouse_entered" from="moveERegion" to="." method="_on_move_e_region_mouse_entered"]
+[connection signal="mouse_exited" from="moveERegion" to="." method="_on_move_e_region_mouse_exited"]
+[connection signal="mouse_entered" from="moveNWRegion" to="." method="_on_move_nw_region_mouse_entered"]
+[connection signal="mouse_exited" from="moveNWRegion" to="." method="_on_move_nw_region_mouse_exited"]
+[connection signal="mouse_entered" from="moveSWRegion" to="." method="_on_move_sw_region_mouse_entered"]
+[connection signal="mouse_exited" from="moveSWRegion" to="." method="_on_move_sw_region_mouse_exited"]
+[connection signal="mouse_entered" from="moveSERegion" to="." method="_on_move_se_region_mouse_entered"]
+[connection signal="mouse_exited" from="moveSERegion" to="." method="_on_move_se_region_mouse_exited"]
+[connection signal="mouse_entered" from="moveNERegion" to="." method="_on_move_ne_region_mouse_entered"]
+[connection signal="mouse_exited" from="moveNERegion" to="." method="_on_move_ne_region_mouse_exited"]

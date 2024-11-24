@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://d04v4riakl1uy"]
+
+[ext_resource type="Texture2D" uid="uid://w00x2su7fgtu" path="res://sprites/buildings/shack-view-270.png" id="1_obqx5"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7ddh1"]
+size = Vector2(14.7896, 31.5168)
+
+[node name="Node2D" type="Node2D"]
+
+[node name="Shack-view-270" type="Sprite2D" parent="."]
+texture = ExtResource("1_obqx5")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(2.81985, 12.4117)
+rotation = 0.263545
+scale = Vector2(1, 1)
+skew = 0.993092
+shape = SubResource("RectangleShape2D_7ddh1")
