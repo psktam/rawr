@@ -12,9 +12,9 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	if cmder.state == "still":
+	if cmder.state == "idle":
 		target_cursor.visible = false
-	elif cmder.state == "moving":
+	elif cmder.state == "walking":
 		target_cursor.visible = true
 		target_cursor.global_position = cmder.destination
 		

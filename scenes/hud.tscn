@@ -1,24 +1,30 @@
-[gd_scene load_steps=2 format=3 uid="uid://dfte5p8obfyr"]
+[gd_scene load_steps=4 format=3 uid="uid://dfte5p8obfyr"]
 
 [ext_resource type="Texture2D" uid="uid://bl0yrj2rma0k" path="res://sprites/hud/beam-icon.png" id="1_rjudu"]
+[ext_resource type="Script" path="res://scripts/hud.gd" id="1_ws1l1"]
+[ext_resource type="Texture2D" uid="uid://cug36718hg0ln" path="res://sprites/hud/meteor-icon.png" id="2_06vp6"]
 
 [node name="HUD" type="CanvasLayer"]
+script = ExtResource("1_ws1l1")
 
-[node name="ColorRect" type="ColorRect" parent="."]
-offset_left = 17.0
-offset_top = 460.0
+[node name="MenuTray" type="ColorRect" parent="."]
+offset_left = 885.0
 offset_right = 1135.0
 offset_bottom = 634.0
 color = Color(0.220616, 0.48339, 0.247151, 1)
 
-[node name="Button" type="Button" parent="."]
-offset_left = 40.0
-offset_top = 486.0
-offset_right = 112.0
-offset_bottom = 558.0
+[node name="BeamButton" type="Button" parent="."]
+offset_left = 894.0
+offset_top = 11.0
+offset_right = 966.0
+offset_bottom = 83.0
 toggle_mode = true
 icon = ExtResource("1_rjudu")
 
-[node name="Button2" type="Button" parent="."]
-offset_right = 8.0
-offset_bottom = 8.0
+[node name="MeteorButton" type="Button" parent="."]
+offset_left = 972.0
+offset_top = 11.0
+offset_right = 1044.0
+offset_bottom = 83.0
+toggle_mode = true
+icon = ExtResource("2_06vp6")
