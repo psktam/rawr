@@ -1,0 +1,24 @@
+[gd_scene load_steps=2 format=3 uid="uid://dfte5p8obfyr"]
+
+[ext_resource type="Texture2D" uid="uid://bl0yrj2rma0k" path="res://sprites/hud/beam-icon.png" id="1_rjudu"]
+
+[node name="HUD" type="CanvasLayer"]
+
+[node name="ColorRect" type="ColorRect" parent="."]
+offset_left = 17.0
+offset_top = 460.0
+offset_right = 1135.0
+offset_bottom = 634.0
+color = Color(0.220616, 0.48339, 0.247151, 1)
+
+[node name="Button" type="Button" parent="."]
+offset_left = 40.0
+offset_top = 486.0
+offset_right = 112.0
+offset_bottom = 558.0
+toggle_mode = true
+icon = ExtResource("1_rjudu")
+
+[node name="Button2" type="Button" parent="."]
+offset_right = 8.0
+offset_bottom = 8.0

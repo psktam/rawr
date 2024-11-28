@@ -1,10 +1,11 @@
-[gd_scene load_steps=11 format=3 uid="uid://k3q0mxnjh18o"]
+[gd_scene load_steps=12 format=3 uid="uid://k3q0mxnjh18o"]
 
 [ext_resource type="PackedScene" uid="uid://b1s8asp8w3plb" path="res://scenes/level.tscn" id="1_352t2"]
 [ext_resource type="Script" path="res://scenes/game.gd" id="1_wuqmk"]
 [ext_resource type="PackedScene" uid="uid://dyur53qk36clc" path="res://scenes/cmder.tscn" id="2_hvcja"]
 [ext_resource type="Script" path="res://scripts/cmder.gd" id="3_2eqsb"]
 [ext_resource type="Texture2D" uid="uid://dagwb8b0oc1ph" path="res://sprites/target-cursor-sheet.png" id="4_a6vrn"]
+[ext_resource type="PackedScene" uid="uid://dfte5p8obfyr" path="res://scenes/hud.tscn" id="6_no60r"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_s1vf1"]
 atlas = ExtResource("4_a6vrn")
@@ -60,3 +61,5 @@ visible = false
 sprite_frames = SubResource("SpriteFrames_71s6n")
 autoplay = "default"
 frame_progress = 0.382236
+
+[node name="HUD" parent="." instance=ExtResource("6_no60r")]

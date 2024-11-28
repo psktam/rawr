@@ -2,9 +2,11 @@ extends Node2D
 
 @onready var cmder = $cmder
 @onready var target_cursor: AnimatedSprite2D = $targetCursor
+var base_cursor = load("res://sprites/cursors/basic.png")
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	Input.set_custom_mouse_cursor(base_cursor)
 	pass # Replace with function body.
 
 

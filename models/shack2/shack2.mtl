@@ -1,0 +1,50 @@
+# Apple ModelI/O MTL File: shack2.mtl
+
+newmtl Material0
+	map_Kd Material0-color.png
+	Kd 1 1 1
+	Ka 0 0 0
+	Ks 0
+	ao 0
+	subsurface 0
+	map_metallic Material0-metallic.png
+	specularTint 0
+	map_roughness Material0-roughness.png
+	anisotropicRotation 0
+	sheen 0.05
+	sheenTint 0
+	clearCoat 0
+	clearCoatGloss 0
+
+newmtl Material.002
+	map_Kd Material.002-color.png
+	Kd 1 1 1
+	Ka 0 0 0
+	Ks 0
+	ao 0
+	subsurface 0
+	map_metallic Material.002-metallic.png
+	specularTint 0
+	map_roughness Material.002-roughness.png
+	anisotropicRotation 0
+	sheen 0.05
+	sheenTint 0
+	clearCoat 0
+	clearCoatGloss 0
+
+newmtl Material
+	map_Kd Material-color.png
+	Kd 1 1 1
+	Ka 0 0 0
+	Ks 0
+	ao 0
+	subsurface 0
+	map_metallic Material-metallic.png
+	specularTint 0
+	map_roughness Material-roughness.png
+	anisotropicRotation 0
+	sheen 0.05
+	sheenTint 0
+	clearCoat 0
+	clearCoatGloss 0
+

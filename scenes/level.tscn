@@ -1,94 +1,115 @@
-[gd_scene load_steps=8 format=4 uid="uid://b1s8asp8w3plb"]
+[gd_scene load_steps=21 format=4 uid="uid://b1s8asp8w3plb"]
 
 [ext_resource type="Texture2D" uid="uid://dhyeg8da0411l" path="res://tiles/grass-tiles.png" id="1_urmcf"]
-[ext_resource type="Texture2D" uid="uid://ccwyep66lfnvi" path="res://sprites/buildings/buildings.png" id="2_0qpmn"]
 [ext_resource type="Texture2D" uid="uid://d21ssk2inefjo" path="res://sprites/buildings/shack-view-0.png" id="2_86quk"]
+[ext_resource type="Texture2D" uid="uid://dg415d158mndh" path="res://sprites/buildings/shack2-view-0.png" id="3_rno5j"]
+[ext_resource type="Texture2D" uid="uid://jvd1fisnr7q7" path="res://sprites/buildings/silo-view-0.png" id="4_hum43"]
+[ext_resource type="Texture2D" uid="uid://dfp7sihuaj0et" path="res://sprites/buildings/silo-view-90.png" id="5_oaauu"]
+[ext_resource type="Texture2D" uid="uid://cg5b5d32ynmsr" path="res://sprites/buildings/silo-view-270.png" id="6_tu26i"]
+[ext_resource type="Texture2D" uid="uid://h863cs6dahx4" path="res://sprites/buildings/shack2-view-270.png" id="7_o86ex"]
+[ext_resource type="Texture2D" uid="uid://dl3xa5soykba4" path="res://sprites/buildings/factory1-view-0.png" id="8_jd5h1"]
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_5sord"]
+vertices = PackedVector2Array(32, 0, 0, 16, -32, 0, 0, -16)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(0, -16, -32, 0, 0, 16, 32, 0)])
+agent_radius = 0.0
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_0cpcw"]
+vertices = PackedVector2Array(32, 0, 0, 16, -32, 0, 0, -16)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(0, -16, -32, 0, 0, 16, 32, 0)])
+agent_radius = 0.0
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_suv6x"]
+vertices = PackedVector2Array(32, 0, 0, 16, -32, 0, 0, -16)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(0, -16, -32, 0, 0, 16, 32, 0)])
+agent_radius = 0.0
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_diwjn"]
+vertices = PackedVector2Array(32, 0, 0, 16, -32, 0, 0, -16)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(0, -16, -32, 0, 0, 16, 32, 0)])
+agent_radius = 0.0
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_rxkx0"]
+vertices = PackedVector2Array(32, 0, 0, 16, -32, 0, 0, -16)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(0, -16, -32, 0, 0, 16, 32, 0)])
+agent_radius = 0.0
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_mo5ep"]
+vertices = PackedVector2Array(32, 0, 0, 16, -32, 0, 0, -16)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(0, -16, -32, 0, 0, 16, 32, 0)])
+agent_radius = 0.0
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_qnl16"]
+vertices = PackedVector2Array(32, 0, 0, 16, -32, 0, 0, -16)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(0, -16, -32, 0, 0, 16, 32, 0)])
+agent_radius = 0.0
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_3i1o1"]
+vertices = PackedVector2Array(32, 0, 0, 16, -32, 0, 0, -16)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(0, -16, -32, 0, 0, 16, 32, 0)])
+agent_radius = 0.0
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_71dco"]
+vertices = PackedVector2Array(32, 0, 0, 16, -32, 0, 0, -16)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(0, -16, -32, 0, 0, 16, 32, 0)])
+agent_radius = 0.0
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_tsyno"]
+vertices = PackedVector2Array(32, 0, 0, 16, -32, 0, 0, -16)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(0, -16, -32, 0, 0, 16, 32, 0)])
+agent_radius = 0.0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_t1lmo"]
 texture = ExtResource("1_urmcf")
 texture_region_size = Vector2i(64, 48)
 0:0/0 = 0
 0:0/0/texture_origin = Vector2i(0, -8)
+0:0/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_5sord")
 1:0/0 = 0
 1:0/0/texture_origin = Vector2i(0, -8)
+1:0/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_rxkx0")
 2:0/0 = 0
 2:0/0/texture_origin = Vector2i(0, -8)
+2:0/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_3i1o1")
 0:1/0 = 0
 0:1/0/texture_origin = Vector2i(0, -8)
+0:1/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_0cpcw")
 1:1/0 = 0
 1:1/0/texture_origin = Vector2i(0, -8)
+1:1/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_mo5ep")
 2:1/0 = 0
 2:1/0/texture_origin = Vector2i(0, -8)
+2:1/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_71dco")
 2:2/0 = 0
 2:2/0/texture_origin = Vector2i(0, -8)
+2:2/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_tsyno")
 1:2/0 = 0
 1:2/0/texture_origin = Vector2i(0, -8)
+1:2/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_qnl16")
 0:2/0 = 0
 0:2/0/texture_origin = Vector2i(0, -8)
+0:2/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_suv6x")
 0:3/0 = 0
 0:3/0/texture_origin = Vector2i(0, -8)
+0:3/0/navigation_layer_0/polygon = SubResource("NavigationPolygon_diwjn")
 
 [sub_resource type="TileSet" id="TileSet_niybi"]
 tile_shape = 1
 tile_layout = 5
 tile_offset_axis = 1
 tile_size = Vector2i(64, 32)
+navigation_layer_0/layers = 1
 sources/3 = SubResource("TileSetAtlasSource_t1lmo")
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_2fqdl"]
-texture = ExtResource("2_0qpmn")
-texture_region_size = Vector2i(64, 64)
-2:0/0 = 0
-3:0/0 = 0
-2:1/0 = 0
-3:1/0 = 0
-2:2/0 = 0
-3:2/0 = 0
-0:3/0 = 0
-1:3/0 = 0
-2:3/0 = 0
-3:3/0 = 0
-2:4/0 = 0
-3:4/0 = 0
-0:5/0 = 0
-1:5/0 = 0
-2:5/0 = 0
-3:5/0 = 0
-0:6/0 = 0
-1:6/0 = 0
-2:6/0 = 0
-3:6/0 = 0
-0:7/0 = 0
-1:7/0 = 0
-2:7/0 = 0
-3:7/0 = 0
-0:8/0 = 0
-1:8/0 = 0
-0:9/0 = 0
-1:9/0 = 0
-0:10/0 = 0
-1:10/0 = 0
-0:11/0 = 0
-1:11/0 = 0
-0:0/0 = 0
-0:0/0/texture_origin = Vector2i(0, 20)
-0:1/0 = 0
-0:1/0/texture_origin = Vector2i(0, 20)
-0:2/0 = 0
-0:2/0/texture_origin = Vector2i(0, 20)
-1:0/0 = 0
-1:0/0/texture_origin = Vector2i(0, 20)
-1:1/0 = 0
-1:1/0/texture_origin = Vector2i(0, 20)
-1:2/0 = 0
-1:2/0/texture_origin = Vector2i(0, 20)
-
-[sub_resource type="TileSet" id="TileSet_b18oi"]
-tile_shape = 1
-tile_layout = 5
-tile_offset_axis = 1
-tile_size = Vector2i(32, 16)
-sources/1 = SubResource("TileSetAtlasSource_2fqdl")
 
 [node name="big-tilemap" type="Node2D"]
 y_sort_enabled = true
@@ -97,13 +118,6 @@ y_sort_enabled = true
 use_parent_material = true
 tile_map_data = PackedByteArray("AAD//wAAAwAAAAEAAAAAAAAAAwABAAAAAAABAAAAAwABAAAAAAACAAAAAwABAAAAAAACAAEAAwABAAAAAAABAAEAAwABAAAAAAAAAAEAAwABAAAAAAD//wEAAwAAAAEAAAABAAIAAwABAAAAAAABAAMAAwABAAEAAAABAAQAAwABAAAAAAAAAAIAAwABAAAAAAD//wIAAwAAAAEAAAAAAAMAAwABAAEAAAD//wMAAwACAAEAAAAAAAQAAwABAAAAAAD//wQAAwAAAAEAAAACAAIAAwABAAAAAAACAAMAAwABAAEAAAABAAUAAwABAAAAAAACAAUAAwABAAAAAAADAAUAAwABAAAAAAAFAAUAAwAAAAEAAAAEAAUAAwABAAAAAAAGAAUAAwABAAAAAAACAAQAAwABAAAAAAADAAQAAwABAAAAAAADAAMAAwABAAEAAAADAAEAAwABAAAAAAADAAIAAwABAAAAAAADAAAAAwABAAAAAAABAAYAAwABAAEAAAABAAgAAwABAAAAAAABAAcAAwABAAAAAAAAAAUAAwABAAAAAAD//wUAAwAAAAEAAAD+/wUAAwAAAAAAAAD+/wQAAwAAAAAAAAD+/wMAAwABAAEAAAD+/wIAAwAAAAAAAAD+/wEAAwAAAAAAAAD+/wAAAwAAAAAAAAD9/wAAAwAAAAAAAAD9/wEAAwAAAAAAAAD9/wIAAwAAAAAAAAD9/wMAAwABAAEAAAD9/wQAAwAAAAAAAAD9/wUAAwAAAAAAAAAEAAMAAwABAAEAAAAFAAMAAwACAAEAAAAFAAQAAwAAAAEAAAAFAAIAAwAAAAEAAAAFAAAAAwAAAAEAAAAFAAEAAwAAAAEAAAAEAAQAAwABAAAAAAD//wYAAwABAAIAAAAFAAYAAwAAAAMAAAAEAAYAAwABAAEAAAACAAYAAwABAAEAAAAAAAYAAwABAAEAAAADAAYAAwABAAEAAAACAAgAAwABAAAAAAACAAcAAwABAAAAAAADAAcAAwABAAAAAAADAAgAAwABAAAAAAAEAAgAAwABAAAAAAAEAAcAAwABAAAAAAAFAAcAAwABAAAAAAAGAAgAAwABAAAAAAAFAAgAAwABAAAAAAAGAAcAAwABAAAAAAAGAAYAAwABAAAAAAAAAAcAAwABAAAAAAAAAAgAAwABAAAAAAD//wgAAwABAAAAAAD//wcAAwABAAAAAAD+/wYAAwABAAAAAAD+/wcAAwABAAAAAAD+/wgAAwABAAAAAAD9/wcAAwABAAAAAAD9/wYAAwABAAAAAAD9/wgAAwABAAAAAAD8/wMAAwABAAIAAAD8////AwAAAAIAAAD/////AwACAAEAAAAFAP//AwACAAEAAAAGAAMAAwABAAEAAAAIAAMAAwAAAAMAAAAHAAMAAwABAAEAAAAGAP//AwABAAEAAAAHAP//AwABAAEAAAAIAP//AwACAAIAAAAIAAIAAwAAAAEAAAAIAAEAAwAAAAEAAAAIAAAAAwAAAAEAAAD///7/AwAAAAEAAAD///z/AwAAAAIAAAD///3/AwAAAAEAAAAFAP7/AwAAAAEAAAAFAP3/AwAAAAEAAAAFAPz/AwACAAIAAAAAAPz/AwABAAEAAAACAPz/AwABAAEAAAABAPz/AwABAAEAAAADAPz/AwABAAEAAAAEAPz/AwABAAEAAAAAAP//AwABAAEAAAABAP//AwABAAEAAAACAP//AwABAAEAAAAEAP//AwABAAEAAAADAP//AwABAAEAAAD+////AwABAAEAAAD9////AwABAAEAAAD8/wIAAwAAAAEAAAD8/wEAAwAAAAEAAAD8/wAAAwAAAAEAAAAEAAIAAwAAAAAAAAAEAAEAAwAAAAAAAAAEAAAAAwAAAAAAAAAGAAQAAwAAAAAAAAAGAAIAAwAAAAAAAAAGAAEAAwAAAAAAAAAGAAAAAwAAAAAAAAAHAAAAAwAAAAAAAAAHAAEAAwAAAAAAAAAHAAIAAwAAAAAAAAAHAAgAAwAAAAAAAAAHAAcAAwAAAAAAAAAHAAYAAwAAAAAAAAAHAAUAAwAAAAAAAAAHAAQAAwAAAAAAAAAIAAQAAwAAAAAAAAAIAAUAAwAAAAAAAAAIAAYAAwAAAAAAAAAIAAcAAwAAAAAAAAAIAAgAAwAAAAAAAAAGAP7/AwAAAAAAAAAGAP3/AwAAAAAAAAAGAPz/AwAAAAAAAAAHAPz/AwAAAAAAAAAHAP7/AwAAAAAAAAAHAP3/AwAAAAAAAAAIAPz/AwAAAAAAAAAIAP3/AwAAAAAAAAAIAP7/AwAAAAAAAAAEAP7/AwAAAAAAAAAEAP3/AwAAAAAAAAACAP3/AwAAAAAAAAADAP3/AwAAAAAAAAABAP3/AwAAAAAAAAAAAP3/AwAAAAAAAAAAAP7/AwAAAAAAAAABAP7/AwAAAAAAAAACAP7/AwAAAAAAAAADAP7/AwAAAAAAAAD8/wgAAwAAAAAAAAD8/wYAAwAAAAAAAAD8/wcAAwAAAAAAAAD8/wQAAwAAAAAAAAD8/wUAAwAAAAAAAAD8//7/AwAAAAAAAAD9//7/AwAAAAAAAAD+//7/AwAAAAAAAAD+//3/AwAAAAAAAAD+//z/AwAAAAAAAAD9//z/AwAAAAAAAAD9//3/AwAAAAAAAAD8//3/AwAAAAAAAAD8//z/AwAAAAAAAAA=")
 tile_set = SubResource("TileSet_niybi")
-
-[node name="Level1" type="TileMapLayer" parent="."]
-z_index = 1
-use_parent_material = true
-tile_map_data = PackedByteArray("AAD8/wAAAQAAAAEAAAABAAQAAQAAAAIAAAAJAAQAAQAAAAIAAAAHAAQAAQABAAAAAAAFAAQAAQAAAAEAAAADAAQAAQABAAAAAAADAAIAAQAAAAEAAAA=")
-tile_set = SubResource("TileSet_b18oi")
-y_sort_origin = 1
 
 [node name="Shack-view-0" type="Sprite2D" parent="."]
 position = Vector2(-78, 116)
@@ -117,3 +131,32 @@ texture = ExtResource("2_86quk")
 [node name="Shack-view-2" type="Sprite2D" parent="."]
 position = Vector2(0, 153)
 texture = ExtResource("2_86quk")
+
+[node name="Shack2-view-0" type="Sprite2D" parent="."]
+position = Vector2(-157, 83)
+scale = Vector2(0.0703125, 0.0703125)
+texture = ExtResource("3_rno5j")
+
+[node name="Silo-view-0" type="Sprite2D" parent="."]
+position = Vector2(-33, 33)
+texture = ExtResource("4_hum43")
+
+[node name="Silo-view-90" type="Sprite2D" parent="."]
+position = Vector2(21, 125)
+texture = ExtResource("5_oaauu")
+
+[node name="Silo-view-270" type="Sprite2D" parent="."]
+position = Vector2(61, 80)
+texture = ExtResource("6_tu26i")
+
+[node name="Shack2-view-1" type="Sprite2D" parent="."]
+position = Vector2(31, 146)
+texture = ExtResource("3_rno5j")
+
+[node name="Shack2-view-270" type="Sprite2D" parent="."]
+position = Vector2(46, 139)
+texture = ExtResource("7_o86ex")
+
+[node name="Factory1-view-0" type="Sprite2D" parent="."]
+position = Vector2(95, 99)
+texture = ExtResource("8_jd5h1")

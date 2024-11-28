@@ -1,0 +1,22 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://cxd7nasp2c2o0"
+path="res://.godot/imported/shack2.obj-5db9e011590f2001ebc7809c42a83302.mesh"
+
+[deps]
+
+files=["res://.godot/imported/shack2.obj-5db9e011590f2001ebc7809c42a83302.mesh"]
+
+source_file="res://models/meshes_for_painting/shack2.obj"
+dest_files=["res://.godot/imported/shack2.obj-5db9e011590f2001ebc7809c42a83302.mesh", "res://.godot/imported/shack2.obj-5db9e011590f2001ebc7809c42a83302.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true
+force_disable_mesh_compression=false

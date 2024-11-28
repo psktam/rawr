@@ -4148,3 +4148,5 @@ position = Vector2(1, 4)
 rotation = 0.464258
 skew = 0.644027
 shape = SubResource("RectangleShape2D_yidrc")
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]

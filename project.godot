@@ -23,6 +23,10 @@ Resources="*res://scripts/resources.gd"
 
 import/blender/enabled=false
 
+[layer_names]
+
+2d_navigation/layer_1="base"
+
 [rendering]
 
 textures/canvas_textures/default_texture_filter=0
