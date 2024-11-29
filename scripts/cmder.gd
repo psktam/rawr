@@ -9,10 +9,11 @@ const IDLE = "idle"
 const BASIC_ATTACK = "basic_attack"
 
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
+@export_category("Custom properties")
 @export var state: String = IDLE
 @export var entering: bool = true
 @export var destination: Vector2 = self.position
-@export var target_location: Vector2 = self.position
+@export var hud_reference: CanvasLayer
 var display_direction: int = 0
 
 ################################################################################
@@ -55,6 +56,18 @@ func _transition_to_state(target_state: String) -> void:
 	entering = true
 
 
+func _at_destination() -> bool:
+	return (self.position - destination).length() <= 5
+
+
+func _check_mouse_click(click: InputEventMouseButton) -> bool:
+	"""
+	Indicates whether or not the mouse click was in the playing field or on the
+	menu.
+	"""
+	return click.position.x < get_viewport_rect().size.x - 250
+
+
 # ------- idle state
 func _input_idle(event: InputEvent) -> void:
 	"""
@@ -62,15 +75,18 @@ func _input_idle(event: InputEvent) -> void:
 	to states, rather than directly handling behaviors. Those attitudes will
 	be dealt with in the relevant _xxx_process functions.
 	"""
-	if event is InputEventMouseButton:
+	if event is InputEventMouseButton and _check_mouse_click(event):
 		if event.button_index == MOUSE_BUTTON_RIGHT and event.is_released():
 			destination = get_global_mouse_position()
 			_transition_to_state(WALKING)
 
-		elif event.button_index == MOUSE_BUTTON_LEFT and event.is_released():
-			target_location = get_global_mouse_position()
-
-			_transition_to_state(BASIC_ATTACK)
+		elif (
+			event.button_index == MOUSE_BUTTON_LEFT and 
+			event.is_released() and 
+			hud_reference.attack_controller.ready_for_attack()
+		):
+			if hud_reference.attack_controller.fire(get_global_mouse_position()):
+				_transition_to_state(BASIC_ATTACK)
 
 func _physics_process_idle(delta: float) -> void:
 	entering = false
@@ -87,12 +103,16 @@ func _process_idle(delta: float) -> void:
 
 # ------- walking state
 func _input_walking(event: InputEvent) -> void:
-	if event is InputEventMouseButton:
+	if event is InputEventMouseButton and _check_mouse_click(event):
 		if event.button_index == MOUSE_BUTTON_RIGHT and event.is_released():
 			destination = get_global_mouse_position()
-		elif event.button_index == MOUSE_BUTTON_LEFT and event.is_released():
-			target_location = get_global_mouse_position()
-			_transition_to_state(BASIC_ATTACK)
+		elif (
+			event.button_index == MOUSE_BUTTON_LEFT and 
+			event.is_released() and 
+			hud_reference.attack_controller.ready_for_attack()
+		):
+			if hud_reference.attack_controller.fire(get_global_mouse_position()):
+				_transition_to_state(BASIC_ATTACK)
 	elif event is InputEventKey:
 		if event.keycode == KEY_S:
 			_transition_to_state(IDLE)
@@ -103,7 +123,7 @@ func _physics_process_walking(delta: float) -> void:
 	var raw_delta = destination - self.position
 	var direction = raw_delta.normalized()
 
-	if raw_delta.length() > 5:
+	if not _at_destination():
 		self.velocity = direction * SPEED
 	else: 
 		self.velocity = Vector2.ZERO
@@ -119,25 +139,28 @@ func _process_walking(delta: float) -> void:
 
 # ------- basic attack state
 func _input_basic_attack(event: InputEvent) -> void:
-	pass
+	if event is InputEventMouseButton and _check_mouse_click(event):
+		if event.button_index == MOUSE_BUTTON_RIGHT:
+			destination = get_global_mouse_position()
+
 
 func _physics_process_basic_attack(delta: float) -> void:
 	self.velocity = Vector2.ZERO
 
-var time_basic_attack_entered: int
 func _process_basic_attack(delta: float) -> void:
 	if entering:
-		time_basic_attack_entered = Time.get_ticks_msec()
-		entering = false
+		var ac = hud_reference.attack_controller
+		var target_location = ac.targets[ac.selected_attack]
+		display_direction = get_view_name((target_location - self.position).angle() * 180.0 / PI)
+		# Make the character face the direction of the click
+		animated_sprite_2d.animation = "idle-%d" % display_direction
+		animated_sprite_2d.play()
 
-	if (Time.get_ticks_msec() - time_basic_attack_entered) > 1000:
-		_transition_to_state(IDLE)
-		return
-
-	display_direction = get_view_name((target_location - self.position).angle() * 180.0 / PI)
-	# Make the character face the direction of the click
-	animated_sprite_2d.animation = "idle-%d" % display_direction
-	animated_sprite_2d.play()
+	if hud_reference.attack_controller.can_walk():
+		if _at_destination():
+			_transition_to_state(IDLE)
+		else:
+			_transition_to_state(WALKING)
 
 
 ################################################################################
@@ -174,12 +197,9 @@ func _process(delta: float) -> void:
 		_process_basic_attack(delta)
 	else:
 		print("Unrecognized processing state: %s" % state)
+	if entering:
+		entering = false
 
 func _ready() -> void:
 	entering = true
 	_stop_moving()
-
-
-
-
-	

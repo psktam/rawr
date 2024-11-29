@@ -1,11 +1,13 @@
-[gd_scene load_steps=12 format=3 uid="uid://k3q0mxnjh18o"]
+[gd_scene load_steps=24 format=3 uid="uid://k3q0mxnjh18o"]
 
 [ext_resource type="PackedScene" uid="uid://b1s8asp8w3plb" path="res://scenes/level.tscn" id="1_352t2"]
 [ext_resource type="Script" path="res://scenes/game.gd" id="1_wuqmk"]
 [ext_resource type="PackedScene" uid="uid://dyur53qk36clc" path="res://scenes/cmder.tscn" id="2_hvcja"]
 [ext_resource type="Script" path="res://scripts/cmder.gd" id="3_2eqsb"]
-[ext_resource type="Texture2D" uid="uid://dagwb8b0oc1ph" path="res://sprites/target-cursor-sheet.png" id="4_a6vrn"]
+[ext_resource type="Texture2D" uid="uid://dagwb8b0oc1ph" path="res://sprites/cursors/target-cursor-sheet.png" id="4_a6vrn"]
 [ext_resource type="PackedScene" uid="uid://dfte5p8obfyr" path="res://scenes/hud.tscn" id="6_no60r"]
+[ext_resource type="Texture2D" uid="uid://cbcjtktnkwbok" path="res://sprites/cursors/basic_attack_cursor.png" id="7_y8v5b"]
+[ext_resource type="Texture2D" uid="uid://dxsffyxko4ue" path="res://sprites/cursors/meteor-cursor.png" id="8_wxqq2"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_s1vf1"]
 atlas = ExtResource("4_a6vrn")
@@ -43,16 +45,89 @@ animations = [{
 "speed": 12.0
 }]
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_kynyo"]
+atlas = ExtResource("7_y8v5b")
+region = Rect2(0, 0, 32, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vpbj1"]
+atlas = ExtResource("7_y8v5b")
+region = Rect2(32, 0, 32, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gxvyl"]
+atlas = ExtResource("7_y8v5b")
+region = Rect2(64, 0, 32, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cu0jy"]
+atlas = ExtResource("7_y8v5b")
+region = Rect2(96, 0, 32, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_nff3y"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kynyo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vpbj1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gxvyl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cu0jy")
+}],
+"loop": true,
+"name": &"default",
+"speed": 12.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_elmr7"]
+atlas = ExtResource("8_wxqq2")
+region = Rect2(0, 0, 32, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5o77t"]
+atlas = ExtResource("8_wxqq2")
+region = Rect2(32, 0, 32, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3jl1h"]
+atlas = ExtResource("8_wxqq2")
+region = Rect2(64, 0, 32, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0gi3g"]
+atlas = ExtResource("8_wxqq2")
+region = Rect2(96, 0, 32, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_6fy7j"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_elmr7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5o77t")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3jl1h")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0gi3g")
+}],
+"loop": true,
+"name": &"default",
+"speed": 12.0
+}]
+
 [node name="game" type="Node2D"]
 script = ExtResource("1_wuqmk")
 
 [node name="level" parent="." instance=ExtResource("1_352t2")]
 
-[node name="cmder" parent="." instance=ExtResource("2_hvcja")]
+[node name="cmder" parent="." node_paths=PackedStringArray("hud_reference") instance=ExtResource("2_hvcja")]
 position = Vector2(-53, -37)
 script = ExtResource("3_2eqsb")
+hud_reference = NodePath("../HUD")
 
-[node name="Camera2D" type="Camera2D" parent="cmder"]
+[node name="playerCamera" type="Camera2D" parent="cmder"]
 position = Vector2(13, -21)
 position_smoothing_enabled = true
 
@@ -63,3 +138,15 @@ autoplay = "default"
 frame_progress = 0.382236
 
 [node name="HUD" parent="." instance=ExtResource("6_no60r")]
+
+[node name="basicAttackCursor" type="AnimatedSprite2D" parent="."]
+visible = false
+sprite_frames = SubResource("SpriteFrames_nff3y")
+autoplay = "default"
+frame = 2
+frame_progress = 0.548314
+
+[node name="meteorAttackCursor" type="AnimatedSprite2D" parent="."]
+visible = false
+sprite_frames = SubResource("SpriteFrames_6fy7j")
+autoplay = "default"
