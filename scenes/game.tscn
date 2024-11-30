@@ -150,3 +150,5 @@ frame_progress = 0.548314
 visible = false
 sprite_frames = SubResource("SpriteFrames_6fy7j")
 autoplay = "default"
+
+[node name="attacksGoHere" type="Node2D" parent="."]

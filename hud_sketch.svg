@@ -24,10 +24,10 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
      inkscape:zoom="7.0504785"
-     inkscape:cx="327.28275"
-     inkscape:cy="623.07828"
-     inkscape:window-width="2557"
-     inkscape:window-height="1366"
+     inkscape:cx="257.57117"
+     inkscape:cy="679.24468"
+     inkscape:window-width="1280"
+     inkscape:window-height="800"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="0"
@@ -314,5 +314,14 @@
        d="m 85.902767,171.65838 4e-6,-7.79382"
        id="path27"
        sodipodi:nodetypes="cc" />
+    <circle
+       style="fill:#ffffff;fill-opacity:1;stroke:#ff0000;stroke-width:0.5;stroke-dasharray:none;stroke-opacity:1"
+       id="path1"
+       cx="69.112869"
+       cy="179.55074"
+       r="1.4293977"
+       inkscape:export-filename="sprites/beam-blob-1.png"
+       inkscape:export-xdpi="181.49391"
+       inkscape:export-ydpi="181.49391" />
   </g>
 </svg>

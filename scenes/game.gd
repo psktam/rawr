@@ -1,5 +1,6 @@
 extends Node2D
 
+@onready var attacks_go_here: Node2D = $attacksGoHere
 @onready var cmder = $cmder
 @onready var target_cursor: AnimatedSprite2D = $targetCursor
 @onready var basic_attack_cursor: AnimatedSprite2D = $basicAttackCursor
@@ -24,12 +25,23 @@ const ZOOM_LEVELS = [
 var zoom_idx = 4
 
 var base_cursor = load("res://sprites/cursors/basic.png")
+const BEAM_ATTACK = preload("res://scenes/beam_attack.tscn")
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	Input.set_custom_mouse_cursor(base_cursor)
 	cursor_map[hud.AC.BASIC] = basic_attack_cursor
 	cursor_map[hud.AC.METEOR] = meteor_attack_cursor
+
+	hud.attack_controller.SIG_BEAM_FIRED.connect(func(target):
+		var beam = BEAM_ATTACK.instantiate()
+		beam.from_point = cmder.position
+		beam.to_point = target
+		attacks_go_here.add_child(beam)
+	)
+	hud.attack_controller.SIG_METEOR_FIRED.connect(func(target):
+		print(target)
+	)
 
 
 func _input(event: InputEvent) -> void:

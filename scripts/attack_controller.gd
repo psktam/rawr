@@ -1,6 +1,9 @@
 const BASIC = "basic"
 const METEOR = "meteor"
 
+signal SIG_BEAM_FIRED(target: Vector2)
+signal SIG_METEOR_FIRED(target: Vector2)
+
 var cooldowns = {
 	BASIC: 0,
 	METEOR: 0
@@ -38,6 +41,11 @@ func fire(target: Vector2) -> bool:
 	if cooldowns[selected_attack] <= 0:
 		cooldowns[selected_attack] = MAX_COOLDOWNS_MS[selected_attack]
 		targets[selected_attack] = target
+
+		if selected_attack == BASIC:
+			SIG_BEAM_FIRED.emit(target)
+		elif selected_attack == METEOR:
+			SIG_METEOR_FIRED.emit(target)
 		return true
 	return false
 

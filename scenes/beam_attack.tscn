@@ -1,6 +1,21 @@
-[gd_scene load_steps=2 format=3 uid="uid://b4vjfj31rfcot"]
+[gd_scene load_steps=5 format=3 uid="uid://b4vjfj31rfcot"]
 
-[ext_resource type="Script" path="res://scripts/beam_attack.gd" id="1_jge3x"]
+[ext_resource type="Script" path="res://scripts/beam_attack.gd" id="1_1slmd"]
+[ext_resource type="Texture2D" uid="uid://yh1gsb6sotum" path="res://sprites/beam-blob-2.png" id="1_21ui2"]
+[ext_resource type="Texture2D" uid="uid://oirv5ybxrgf7" path="res://sprites/beam-blob-0.png" id="2_xbnec"]
+[ext_resource type="Texture2D" uid="uid://bpcj7ldv1u7wp" path="res://sprites/beam-blob-1.png" id="3_oka22"]
 
-[node name="BeamAttack" type="Node2D"]
-script = ExtResource("1_jge3x")
+[node name="beamAttack" type="Node2D"]
+script = ExtResource("1_1slmd")
+
+[node name="Beam-blob" type="Sprite2D" parent="."]
+position = Vector2(-10, 82)
+texture = ExtResource("1_21ui2")
+
+[node name="Beam-blob-0" type="Sprite2D" parent="."]
+position = Vector2(0, -2)
+texture = ExtResource("2_xbnec")
+
+[node name="Beam-blob-1" type="Sprite2D" parent="."]
+position = Vector2(-55, 47)
+texture = ExtResource("3_oka22")

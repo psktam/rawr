@@ -7,7 +7,6 @@ extends CanvasLayer
 
 @export var menu_width: int = 250
 
-
 # Track cooldowns
 const BASIC_ATTACK_COOLDOWN_MS = 500
 const METEOR_COOLDOWN_MS = 5000
