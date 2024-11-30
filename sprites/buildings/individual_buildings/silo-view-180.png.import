@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dg415d158mndh"
-path="res://.godot/imported/shack2-view-0.png-5efef9f9d8f6b9c338be8f8b32e22b84.ctex"
+uid="uid://csrm5ip4ki6o1"
+path="res://.godot/imported/silo-view-180.png-50ead08daec83a55cea2be12e34573d6.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprites/buildings/shack2-view-0.png"
-dest_files=["res://.godot/imported/shack2-view-0.png-5efef9f9d8f6b9c338be8f8b32e22b84.ctex"]
+source_file="res://sprites/buildings/individual_buildings/silo-view-180.png"
+dest_files=["res://.godot/imported/silo-view-180.png-50ead08daec83a55cea2be12e34573d6.ctex"]
 
 [params]
 

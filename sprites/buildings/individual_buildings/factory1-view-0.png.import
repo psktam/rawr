@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://tbkhxlhlyc1d"
-path="res://.godot/imported/shack-view-180.png-8c4d8bafe96607c2d27f6e215d72d352.ctex"
+uid="uid://dl3xa5soykba4"
+path="res://.godot/imported/factory1-view-0.png-d0361df302aab2d55fe31f7219be13f8.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprites/buildings/shack-view-180.png"
-dest_files=["res://.godot/imported/shack-view-180.png-8c4d8bafe96607c2d27f6e215d72d352.ctex"]
+source_file="res://sprites/buildings/individual_buildings/factory1-view-0.png"
+dest_files=["res://.godot/imported/factory1-view-0.png-d0361df302aab2d55fe31f7219be13f8.ctex"]
 
 [params]
 

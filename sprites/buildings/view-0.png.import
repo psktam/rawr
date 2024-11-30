@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dfp7sihuaj0et"
-path="res://.godot/imported/silo-view-90.png-ebfa2db6b97100bc103f074b03214d38.ctex"
+uid="uid://cbw531scj7rq5"
+path="res://.godot/imported/view-0.png-bf02b1a53fc4a765106c868ea789b9f4.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprites/buildings/silo-view-90.png"
-dest_files=["res://.godot/imported/silo-view-90.png-ebfa2db6b97100bc103f074b03214d38.ctex"]
+source_file="res://sprites/buildings/view-0.png"
+dest_files=["res://.godot/imported/view-0.png-bf02b1a53fc4a765106c868ea789b9f4.ctex"]
 
 [params]
 

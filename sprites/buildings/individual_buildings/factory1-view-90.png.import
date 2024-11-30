@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dl3xa5soykba4"
-path="res://.godot/imported/factory1-view-0.png-fc01342d81ab947eba023cb2ad6e3d81.ctex"
+uid="uid://sqgvmh7ink3"
+path="res://.godot/imported/factory1-view-90.png-a95ae0c85f2a2d115389875be1fd7ce3.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://sprites/buildings/factory1-view-0.png"
-dest_files=["res://.godot/imported/factory1-view-0.png-fc01342d81ab947eba023cb2ad6e3d81.ctex"]
+source_file="res://sprites/buildings/individual_buildings/factory1-view-90.png"
+dest_files=["res://.godot/imported/factory1-view-90.png-a95ae0c85f2a2d115389875be1fd7ce3.ctex"]
 
 [params]
 
