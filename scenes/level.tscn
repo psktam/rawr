@@ -1,13 +1,7 @@
-[gd_scene load_steps=21 format=4 uid="uid://b1s8asp8w3plb"]
+[gd_scene load_steps=15 format=4 uid="uid://b1s8asp8w3plb"]
 
+[ext_resource type="Script" path="res://scripts/level.gd" id="1_myfmw"]
 [ext_resource type="Texture2D" uid="uid://dhyeg8da0411l" path="res://tiles/grass-tiles.png" id="1_urmcf"]
-[ext_resource type="Texture2D" uid="uid://d21ssk2inefjo" path="res://sprites/buildings/shack-view-0.png" id="2_86quk"]
-[ext_resource type="Texture2D" uid="uid://dg415d158mndh" path="res://sprites/buildings/shack2-view-0.png" id="3_rno5j"]
-[ext_resource type="Texture2D" uid="uid://jvd1fisnr7q7" path="res://sprites/buildings/silo-view-0.png" id="4_hum43"]
-[ext_resource type="Texture2D" uid="uid://dfp7sihuaj0et" path="res://sprites/buildings/silo-view-90.png" id="5_oaauu"]
-[ext_resource type="Texture2D" uid="uid://cg5b5d32ynmsr" path="res://sprites/buildings/silo-view-270.png" id="6_tu26i"]
-[ext_resource type="Texture2D" uid="uid://h863cs6dahx4" path="res://sprites/buildings/shack2-view-270.png" id="7_o86ex"]
-[ext_resource type="Texture2D" uid="uid://dl3xa5soykba4" path="res://sprites/buildings/factory1-view-0.png" id="8_jd5h1"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_5sord"]
 vertices = PackedVector2Array(32, 0, 0, 16, -32, 0, 0, -16)
@@ -113,50 +107,9 @@ sources/3 = SubResource("TileSetAtlasSource_t1lmo")
 
 [node name="big-tilemap" type="Node2D"]
 y_sort_enabled = true
+script = ExtResource("1_myfmw")
 
 [node name="Level0" type="TileMapLayer" parent="."]
 use_parent_material = true
 tile_map_data = PackedByteArray("AAD//wAAAwAAAAEAAAAAAAAAAwABAAAAAAABAAAAAwABAAAAAAACAAAAAwABAAAAAAACAAEAAwABAAAAAAABAAEAAwABAAAAAAAAAAEAAwABAAAAAAD//wEAAwAAAAEAAAABAAIAAwABAAAAAAABAAMAAwABAAEAAAABAAQAAwABAAAAAAAAAAIAAwABAAAAAAD//wIAAwAAAAEAAAAAAAMAAwABAAEAAAD//wMAAwACAAEAAAAAAAQAAwABAAAAAAD//wQAAwAAAAEAAAACAAIAAwABAAAAAAACAAMAAwABAAEAAAABAAUAAwABAAAAAAACAAUAAwABAAAAAAADAAUAAwABAAAAAAAFAAUAAwAAAAEAAAAEAAUAAwABAAAAAAAGAAUAAwABAAAAAAACAAQAAwABAAAAAAADAAQAAwABAAAAAAADAAMAAwABAAEAAAADAAEAAwABAAAAAAADAAIAAwABAAAAAAADAAAAAwABAAAAAAABAAYAAwABAAEAAAABAAgAAwABAAAAAAABAAcAAwABAAAAAAAAAAUAAwABAAAAAAD//wUAAwAAAAEAAAD+/wUAAwAAAAAAAAD+/wQAAwAAAAAAAAD+/wMAAwABAAEAAAD+/wIAAwAAAAAAAAD+/wEAAwAAAAAAAAD+/wAAAwAAAAAAAAD9/wAAAwAAAAAAAAD9/wEAAwAAAAAAAAD9/wIAAwAAAAAAAAD9/wMAAwABAAEAAAD9/wQAAwAAAAAAAAD9/wUAAwAAAAAAAAAEAAMAAwABAAEAAAAFAAMAAwACAAEAAAAFAAQAAwAAAAEAAAAFAAIAAwAAAAEAAAAFAAAAAwAAAAEAAAAFAAEAAwAAAAEAAAAEAAQAAwABAAAAAAD//wYAAwABAAIAAAAFAAYAAwAAAAMAAAAEAAYAAwABAAEAAAACAAYAAwABAAEAAAAAAAYAAwABAAEAAAADAAYAAwABAAEAAAACAAgAAwABAAAAAAACAAcAAwABAAAAAAADAAcAAwABAAAAAAADAAgAAwABAAAAAAAEAAgAAwABAAAAAAAEAAcAAwABAAAAAAAFAAcAAwABAAAAAAAGAAgAAwABAAAAAAAFAAgAAwABAAAAAAAGAAcAAwABAAAAAAAGAAYAAwABAAAAAAAAAAcAAwABAAAAAAAAAAgAAwABAAAAAAD//wgAAwABAAAAAAD//wcAAwABAAAAAAD+/wYAAwABAAAAAAD+/wcAAwABAAAAAAD+/wgAAwABAAAAAAD9/wcAAwABAAAAAAD9/wYAAwABAAAAAAD9/wgAAwABAAAAAAD8/wMAAwABAAIAAAD8////AwAAAAIAAAD/////AwACAAEAAAAFAP//AwACAAEAAAAGAAMAAwABAAEAAAAIAAMAAwAAAAMAAAAHAAMAAwABAAEAAAAGAP//AwABAAEAAAAHAP//AwABAAEAAAAIAP//AwACAAIAAAAIAAIAAwAAAAEAAAAIAAEAAwAAAAEAAAAIAAAAAwAAAAEAAAD///7/AwAAAAEAAAD///z/AwAAAAIAAAD///3/AwAAAAEAAAAFAP7/AwAAAAEAAAAFAP3/AwAAAAEAAAAFAPz/AwACAAIAAAAAAPz/AwABAAEAAAACAPz/AwABAAEAAAABAPz/AwABAAEAAAADAPz/AwABAAEAAAAEAPz/AwABAAEAAAAAAP//AwABAAEAAAABAP//AwABAAEAAAACAP//AwABAAEAAAAEAP//AwABAAEAAAADAP//AwABAAEAAAD+////AwABAAEAAAD9////AwABAAEAAAD8/wIAAwAAAAEAAAD8/wEAAwAAAAEAAAD8/wAAAwAAAAEAAAAEAAIAAwAAAAAAAAAEAAEAAwAAAAAAAAAEAAAAAwAAAAAAAAAGAAQAAwAAAAAAAAAGAAIAAwAAAAAAAAAGAAEAAwAAAAAAAAAGAAAAAwAAAAAAAAAHAAAAAwAAAAAAAAAHAAEAAwAAAAAAAAAHAAIAAwAAAAAAAAAHAAgAAwAAAAAAAAAHAAcAAwAAAAAAAAAHAAYAAwAAAAAAAAAHAAUAAwAAAAAAAAAHAAQAAwAAAAAAAAAIAAQAAwAAAAAAAAAIAAUAAwAAAAAAAAAIAAYAAwAAAAAAAAAIAAcAAwAAAAAAAAAIAAgAAwAAAAAAAAAGAP7/AwAAAAAAAAAGAP3/AwAAAAAAAAAGAPz/AwAAAAAAAAAHAPz/AwAAAAAAAAAHAP7/AwAAAAAAAAAHAP3/AwAAAAAAAAAIAPz/AwAAAAAAAAAIAP3/AwAAAAAAAAAIAP7/AwAAAAAAAAAEAP7/AwAAAAAAAAAEAP3/AwAAAAAAAAACAP3/AwAAAAAAAAADAP3/AwAAAAAAAAABAP3/AwAAAAAAAAAAAP3/AwAAAAAAAAAAAP7/AwAAAAAAAAABAP7/AwAAAAAAAAACAP7/AwAAAAAAAAADAP7/AwAAAAAAAAD8/wgAAwAAAAAAAAD8/wYAAwAAAAAAAAD8/wcAAwAAAAAAAAD8/wQAAwAAAAAAAAD8/wUAAwAAAAAAAAD8//7/AwAAAAAAAAD9//7/AwAAAAAAAAD+//7/AwAAAAAAAAD+//3/AwAAAAAAAAD+//z/AwAAAAAAAAD9//z/AwAAAAAAAAD9//3/AwAAAAAAAAD8//3/AwAAAAAAAAD8//z/AwAAAAAAAAA=")
 tile_set = SubResource("TileSet_niybi")
-
-[node name="Shack-view-0" type="Sprite2D" parent="."]
-position = Vector2(-78, 116)
-scale = Vector2(0.933594, 0.933594)
-texture = ExtResource("2_86quk")
-
-[node name="Shack-view-1" type="Sprite2D" parent="."]
-position = Vector2(-39, 135)
-texture = ExtResource("2_86quk")
-
-[node name="Shack-view-2" type="Sprite2D" parent="."]
-position = Vector2(0, 153)
-texture = ExtResource("2_86quk")
-
-[node name="Shack2-view-0" type="Sprite2D" parent="."]
-position = Vector2(-157, 83)
-scale = Vector2(0.0703125, 0.0703125)
-texture = ExtResource("3_rno5j")
-
-[node name="Silo-view-0" type="Sprite2D" parent="."]
-position = Vector2(-33, 33)
-texture = ExtResource("4_hum43")
-
-[node name="Silo-view-90" type="Sprite2D" parent="."]
-position = Vector2(21, 125)
-texture = ExtResource("5_oaauu")
-
-[node name="Silo-view-270" type="Sprite2D" parent="."]
-position = Vector2(61, 80)
-texture = ExtResource("6_tu26i")
-
-[node name="Shack2-view-1" type="Sprite2D" parent="."]
-position = Vector2(31, 146)
-texture = ExtResource("3_rno5j")
-
-[node name="Shack2-view-270" type="Sprite2D" parent="."]
-position = Vector2(46, 139)
-texture = ExtResource("7_o86ex")
-
-[node name="Factory1-view-0" type="Sprite2D" parent="."]
-position = Vector2(95, 99)
-texture = ExtResource("8_jd5h1")

@@ -1,0 +1,48 @@
+[gd_scene load_steps=8 format=3 uid="uid://de52iw3op341d"]
+
+[ext_resource type="Texture2D" uid="uid://cimuqm60fhepw" path="res://sprites/attacks/meteor.png" id="1_l0rk8"]
+[ext_resource type="Script" path="res://scripts/meteor_attack.gd" id="1_rt08t"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u6e70"]
+atlas = ExtResource("1_l0rk8")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pfw3g"]
+atlas = ExtResource("1_l0rk8")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_y5wps"]
+atlas = ExtResource("1_l0rk8")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1pac2"]
+atlas = ExtResource("1_l0rk8")
+region = Rect2(192, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_axmac"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u6e70")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pfw3g")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_y5wps")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1pac2")
+}],
+"loop": true,
+"name": &"default",
+"speed": 12.0
+}]
+
+[node name="meteorAttack" type="Node2D"]
+script = ExtResource("1_rt08t")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_axmac")
+autoplay = "default"
+frame_progress = 0.125748

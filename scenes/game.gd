@@ -7,6 +7,7 @@ extends Node2D
 @onready var meteor_attack_cursor: AnimatedSprite2D = $meteorAttackCursor
 @onready var player_camera: Camera2D = $cmder/playerCamera
 @onready var hud: CanvasLayer = $HUD
+@onready var level: Node2D = $level
 
 var cursor_map = {}
 
@@ -26,6 +27,9 @@ var zoom_idx = 4
 
 var base_cursor = load("res://sprites/cursors/basic.png")
 const BEAM_ATTACK = preload("res://scenes/beam_attack.tscn")
+const METEOR_ATTACK = preload("res://scenes/meteor_attack.tscn")
+
+signal SIG_METEOR_LANDED(landing_point: Vector2)
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -40,8 +44,14 @@ func _ready() -> void:
 		attacks_go_here.add_child(beam)
 	)
 	hud.attack_controller.SIG_METEOR_FIRED.connect(func(target):
-		print(target)
+		var meteor = METEOR_ATTACK.instantiate()
+		meteor.world_ref = self
+		meteor.target_point = target
+		attacks_go_here.add_child(meteor)
 	)
+
+	SIG_METEOR_LANDED.connect(level.process_meteor_landing)
+
 
 
 func _input(event: InputEvent) -> void:
