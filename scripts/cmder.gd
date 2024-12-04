@@ -12,9 +12,10 @@ const BASIC_ATTACK = "basic_attack"
 @export_category("Custom properties")
 @export var state: String = IDLE
 @export var entering: bool = true
-@export var destination: Vector2 = self.position
 @export var hud_reference: CanvasLayer
 var display_direction: int = 0
+var navregion: NavigationRegion2D
+@onready var navigation_agent_2d: NavigationAgent2D = $NavigationAgent2D
 
 ################################################################################
 #   					 Code to manage character body motion				   #
@@ -43,7 +44,7 @@ func get_view_name(direction_angle: float) -> int:
 
 
 func _stop_moving() -> void:
-	destination = self.position
+	navigation_agent_2d.set_target_position(self.position)
 
 ################################################################################
 #   					       Everything else								   #
@@ -54,10 +55,6 @@ func _stop_moving() -> void:
 func _transition_to_state(target_state: String) -> void:
 	state = target_state
 	entering = true
-
-
-func _at_destination() -> bool:
-	return (self.position - destination).length() <= 5
 
 
 func _check_mouse_click(click: InputEventMouseButton) -> bool:
@@ -77,7 +74,7 @@ func _input_idle(event: InputEvent) -> void:
 	"""
 	if event is InputEventMouseButton and _check_mouse_click(event):
 		if event.button_index == MOUSE_BUTTON_RIGHT and event.is_released():
-			destination = get_global_mouse_position()
+			navigation_agent_2d.set_target_position(get_global_mouse_position())
 			_transition_to_state(WALKING)
 
 		elif (
@@ -105,7 +102,7 @@ func _process_idle(delta: float) -> void:
 func _input_walking(event: InputEvent) -> void:
 	if event is InputEventMouseButton and _check_mouse_click(event):
 		if event.button_index == MOUSE_BUTTON_RIGHT and event.is_released():
-			destination = get_global_mouse_position()
+			navigation_agent_2d.set_target_position(get_global_mouse_position())
 		elif (
 			event.button_index == MOUSE_BUTTON_LEFT and 
 			event.is_released() and 
@@ -119,20 +116,22 @@ func _input_walking(event: InputEvent) -> void:
 
 func _physics_process_walking(delta: float) -> void:
 	entering = false
-
-	var raw_delta = destination - self.position
-	var direction = raw_delta.normalized()
-
-	if not _at_destination():
-		self.velocity = direction * SPEED
+	
+	# Do not query when the map has never synchronized and is empty.
+	if NavigationServer2D.map_get_iteration_id(navigation_agent_2d.get_navigation_map()) == 0:
+		return
+	
+	if not navigation_agent_2d.is_navigation_finished():
+		var next_path_position = navigation_agent_2d.get_next_path_position()
+		var new_velocity = global_position.direction_to(next_path_position) * SPEED
+		velocity = new_velocity
+		move_and_slide()
 	else: 
 		self.velocity = Vector2.ZERO
 		_transition_to_state(IDLE)
 
-	move_and_slide()
-
 func _process_walking(delta: float) -> void:
-	display_direction = get_view_name(self.velocity.angle() * 180.0 / PI)
+	display_direction = get_view_name(velocity.angle() * 180.0 / PI)
 	animated_sprite_2d.animation = "walk-%d" % display_direction
 	animated_sprite_2d.play()
 
@@ -141,7 +140,7 @@ func _process_walking(delta: float) -> void:
 func _input_basic_attack(event: InputEvent) -> void:
 	if event is InputEventMouseButton and _check_mouse_click(event):
 		if event.button_index == MOUSE_BUTTON_RIGHT:
-			destination = get_global_mouse_position()
+			navigation_agent_2d.set_target_position(get_global_mouse_position())
 
 
 func _physics_process_basic_attack(delta: float) -> void:
@@ -157,7 +156,7 @@ func _process_basic_attack(delta: float) -> void:
 		animated_sprite_2d.play()
 
 	if hud_reference.attack_controller.can_walk():
-		if _at_destination():
+		if navigation_agent_2d.is_navigation_finished():
 			_transition_to_state(IDLE)
 		else:
 			_transition_to_state(WALKING)

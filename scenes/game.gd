@@ -29,6 +29,7 @@ var base_cursor = load("res://sprites/cursors/basic.png")
 const BEAM_ATTACK = preload("res://scenes/beam_attack.tscn")
 const METEOR_ATTACK = preload("res://scenes/meteor_attack.tscn")
 
+signal SIG_BEAM_LANDED(landing_point: Vector2)
 signal SIG_METEOR_LANDED(landing_point: Vector2)
 
 # Called when the node enters the scene tree for the first time.
@@ -41,6 +42,7 @@ func _ready() -> void:
 		var beam = BEAM_ATTACK.instantiate()
 		beam.from_point = cmder.position
 		beam.to_point = target
+		beam.world_ref = self
 		attacks_go_here.add_child(beam)
 	)
 	hud.attack_controller.SIG_METEOR_FIRED.connect(func(target):
@@ -50,6 +52,7 @@ func _ready() -> void:
 		attacks_go_here.add_child(meteor)
 	)
 
+	SIG_BEAM_LANDED.connect(level.process_beam_landing)
 	SIG_METEOR_LANDED.connect(level.process_meteor_landing)
 
 
@@ -73,7 +76,7 @@ func _process(delta: float) -> void:
 		target_cursor.visible = false
 	else:
 		target_cursor.visible = true
-		target_cursor.global_position = cmder.destination
+		target_cursor.global_position = cmder.navigation_agent_2d.target_position
 	
 	for attack_name in hud.attack_controller.cooldowns:
 		if hud.attack_controller.cooldowns[attack_name] > 0:

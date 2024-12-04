@@ -9,7 +9,7 @@
 script = ExtResource("1_1slmd")
 
 [node name="Beam-blob" type="Sprite2D" parent="."]
-position = Vector2(-10, 82)
+position = Vector2(76, -1)
 texture = ExtResource("1_21ui2")
 
 [node name="Beam-blob-0" type="Sprite2D" parent="."]
@@ -17,5 +17,5 @@ position = Vector2(0, -2)
 texture = ExtResource("2_xbnec")
 
 [node name="Beam-blob-1" type="Sprite2D" parent="."]
-position = Vector2(-55, 47)
+position = Vector2(41, -2)
 texture = ExtResource("3_oka22")
