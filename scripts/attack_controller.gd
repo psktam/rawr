@@ -1,16 +1,20 @@
 const BASIC = "basic"
 const METEOR = "meteor"
+const FLAME = "flame"
 
 signal SIG_BEAM_FIRED(target: Vector2)
 signal SIG_METEOR_FIRED(target: Vector2)
+signal SIG_FLAMING(target: Vector2)
 
 var cooldowns = {
 	BASIC: 0,
-	METEOR: 0
+	METEOR: 0,
+	FLAME: 0
 }
 var targets = {
 	BASIC: Vector2.ZERO,
-	METEOR: Vector2.ZERO
+	METEOR: Vector2.ZERO,
+	FLAME: Vector2.ZERO
 }
 
 var selected_attack = "basic"

@@ -7,6 +7,7 @@ const JUMP_VELOCITY = -400.0
 const WALKING = "walking"
 const IDLE = "idle"
 const BASIC_ATTACK = "basic_attack"
+var SP = preload("res://scripts/sprite_poser.gd").new()
 
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
 @export_category("Custom properties")
@@ -20,29 +21,6 @@ var navregion: NavigationRegion2D
 ################################################################################
 #   					 Code to manage character body motion				   #
 ################################################################################
-func _inrange(n, d, u) -> bool:
-	return (d < n) and (n <= u)
-
-
-func get_view_name(direction_angle: float) -> int:
-	if _inrange(direction_angle, -112.5, -67.5):
-		return 0
-	elif _inrange(direction_angle, -67.5, -22.5):
-		return 45
-	elif _inrange(direction_angle, -22.5, 22.5):
-		return 90
-	elif _inrange(direction_angle, 22.5, 67.5):
-		return 135
-	elif _inrange(direction_angle, 67.5, 112.5):
-		return 180
-	elif _inrange(direction_angle, 112.5, 157.5):
-		return 225
-	elif _inrange(direction_angle, -157.5, -112.5):
-		return 315
-	else:
-		return 270
-
-
 func _stop_moving() -> void:
 	navigation_agent_2d.set_target_position(self.position)
 
@@ -131,7 +109,7 @@ func _physics_process_walking(delta: float) -> void:
 		_transition_to_state(IDLE)
 
 func _process_walking(delta: float) -> void:
-	display_direction = get_view_name(velocity.angle() * 180.0 / PI)
+	display_direction = SP.get_view_name(velocity.angle() * 180.0 / PI)
 	animated_sprite_2d.animation = "walk-%d" % display_direction
 	animated_sprite_2d.play()
 
@@ -150,7 +128,7 @@ func _process_basic_attack(delta: float) -> void:
 	if entering:
 		var ac = hud_reference.attack_controller
 		var target_location = ac.targets[ac.selected_attack]
-		display_direction = get_view_name((target_location - self.position).angle() * 180.0 / PI)
+		display_direction = SP.get_view_name((target_location - self.position).angle() * 180.0 / PI)
 		# Make the character face the direction of the click
 		animated_sprite_2d.animation = "idle-%d" % display_direction
 		animated_sprite_2d.play()

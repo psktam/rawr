@@ -23,6 +23,10 @@ Resources="*res://scripts/resources.gd"
 
 import/blender/enabled=false
 
+[global_group]
+
+agent=""
+
 [layer_names]
 
 2d_navigation/layer_1="base"

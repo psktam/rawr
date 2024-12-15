@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://dfte5p8obfyr"]
+[gd_scene load_steps=5 format=3 uid="uid://dfte5p8obfyr"]
 
 [ext_resource type="Texture2D" uid="uid://bl0yrj2rma0k" path="res://sprites/hud/beam-icon.png" id="1_rjudu"]
 [ext_resource type="Script" path="res://scripts/hud.gd" id="1_ws1l1"]
 [ext_resource type="Texture2D" uid="uid://cug36718hg0ln" path="res://sprites/hud/meteor-icon.png" id="2_06vp6"]
+[ext_resource type="Texture2D" uid="uid://qt4041xnoijy" path="res://sprites/hud/flame-icon.png" id="4_lalv2"]
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1_ws1l1")
@@ -38,3 +39,10 @@ offset_top = 7.0
 offset_right = 970.0
 offset_bottom = 87.0
 color = Color(1, 0, 0, 1)
+
+[node name="flameButton" type="Button" parent="."]
+offset_left = 1052.0
+offset_top = 11.0
+offset_right = 1124.0
+offset_bottom = 83.0
+icon = ExtResource("4_lalv2")

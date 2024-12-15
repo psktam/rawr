@@ -3,6 +3,7 @@ extends CanvasLayer
 @onready var menu_tray: ColorRect = $MenuTray
 @onready var beam_button: Button = $BeamButton
 @onready var meteor_button: Button = $MeteorButton
+@onready var flame_button: Button = $flameButton
 @onready var selection_highlight: ColorRect = $selectionHighlight
 
 @export var menu_width: int = 250
