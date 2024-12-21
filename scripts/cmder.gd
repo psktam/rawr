@@ -8,6 +8,8 @@ const WALKING = "walking"
 const IDLE = "idle"
 const BASIC_ATTACK = "basic_attack"
 var SP = preload("res://scripts/sprite_poser.gd").new()
+const AC = preload("res://scripts/attack_controller.gd")
+const Fireball = preload("res://scenes/fireball.tscn")
 
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
 @export_category("Custom properties")
@@ -17,6 +19,10 @@ var SP = preload("res://scripts/sprite_poser.gd").new()
 var display_direction: int = 0
 var navregion: NavigationRegion2D
 @onready var navigation_agent_2d: NavigationAgent2D = $NavigationAgent2D
+var track_button_press = false
+var time_button_pressed_s = 0.0
+var click_ticks = 0
+var tick_time_s = 0.1
 
 ################################################################################
 #   					 Code to manage character body motion				   #
@@ -54,14 +60,21 @@ func _input_idle(event: InputEvent) -> void:
 		if event.button_index == MOUSE_BUTTON_RIGHT and event.is_released():
 			navigation_agent_2d.set_target_position(get_global_mouse_position())
 			_transition_to_state(WALKING)
-
+		
 		elif (
 			event.button_index == MOUSE_BUTTON_LEFT and 
-			event.is_released() and 
 			hud_reference.attack_controller.ready_for_attack()
 		):
-			if hud_reference.attack_controller.fire(get_global_mouse_position()):
-				_transition_to_state(BASIC_ATTACK)
+			if hud_reference.attack_controller.selected_attack == AC.FLAME:
+				if event.is_pressed():
+					track_button_press = true
+					time_button_pressed_s = 0.0
+					click_ticks = 0
+				elif event.is_released():
+					track_button_press = false
+			else:
+				if event.is_released() and hud_reference.attack_controller.fire(get_global_mouse_position()):
+					_transition_to_state(BASIC_ATTACK)
 
 func _physics_process_idle(delta: float) -> void:
 	entering = false
@@ -74,6 +87,16 @@ func _process_idle(delta: float) -> void:
 	# Just make sure that we're not actually doing anything
 	animated_sprite_2d.animation = "idle-%d" % display_direction
 	animated_sprite_2d.play()
+
+	# Handle flamethrowing
+	if track_button_press:
+		time_button_pressed_s += delta
+		if (click_ticks * tick_time_s) < time_button_pressed_s:
+			click_ticks += 1
+			var new_fire = Fireball.instantiate()
+			new_fire.position = position
+			new_fire.target_loc = get_global_mouse_position()
+			$"/root/game/attacksGoHere".add_child(new_fire)
 
 
 # ------- walking state

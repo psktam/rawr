@@ -17,7 +17,8 @@ const AC = preload("res://scripts/attack_controller.gd")
 var attack_controller = AC.new()
 @onready var attack_buttons = {
 	AC.BASIC: beam_button,
-	AC.METEOR: meteor_button
+	AC.METEOR: meteor_button,
+	AC.FLAME: flame_button
 }
 var cooldown_masks = {}
 
@@ -29,6 +30,9 @@ func _ready() -> void:
 	)
 	meteor_button.pressed.connect(func ():
 		attack_controller.selected_attack = AC.METEOR
+	)
+	flame_button.pressed.connect(func ():
+		attack_controller.selected_attack = AC.FLAME
 	)
 
 	for attack_name in attack_controller.cooldowns.keys():
@@ -47,6 +51,8 @@ func _input(event: InputEvent) -> void:
 			beam_button.pressed.emit()
 		elif event.keycode == KEY_2:
 			meteor_button.pressed.emit()
+		elif event.keycode == KEY_3:
+			flame_button.pressed.emit()
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

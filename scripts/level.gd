@@ -1,12 +1,18 @@
 extends Node2D
 
+const DC = preload("res://scripts/damage_coordinator.gd")
+
 @onready var level_0: TileMapLayer = $Level0
 @onready var buildings: TileMapLayer = $buildings
+@onready var flames: TileMapLayer = $flames
 @onready var navigation_region_2d: NavigationRegion2D = $NavigationRegion2D
 
 var update_navmesh = false
 
+# Maps tileMap coordinate -> health of the building on that tile
 var buildingHealths = {}
+# Maps tileMap coordinates -> fireball present at that location
+var fireBalls = {}
 
 const IMMEDIATE_SURROUNDINGS = [
 	Vector2i(-1, -1), 
@@ -30,6 +36,10 @@ func level_layers() -> Dictionary:
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	var damage_controller: DC = $"/root/game".damage_controller
+	damage_controller.BEAM_LANDING.connect(process_beam_landing)
+	damage_controller.METEOR_LANDING.connect(process_meteor_landing)
+
 	for coords in buildings.get_used_cells():
 		var starting_health = buildings.get_cell_tile_data(coords).\
 			get_custom_data("startingHealth")

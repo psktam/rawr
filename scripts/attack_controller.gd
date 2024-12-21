@@ -21,11 +21,13 @@ var selected_attack = "basic"
 
 const MAX_COOLDOWNS_MS = {
 	BASIC: 250,
-	METEOR: 5000
+	METEOR: 5000,
+	FLAME: 1,
 }
 const WALK_STOP_DURATIONS_MS = {
 	BASIC: 250,
-	METEOR: 500
+	METEOR: 500,
+	FLAME: 0
 }
 
 

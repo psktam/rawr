@@ -1,5 +1,8 @@
 extends Node2D
 
+const BEAM_ATTACK = preload("res://scenes/beam_attack.tscn")
+const METEOR_ATTACK = preload("res://scenes/meteor_attack.tscn")
+
 @onready var attacks_go_here: Node2D = $attacksGoHere
 @onready var cmder = $cmder
 @onready var target_cursor: AnimatedSprite2D = $targetCursor
@@ -8,6 +11,7 @@ extends Node2D
 @onready var player_camera: Camera2D = $cmder/playerCamera
 @onready var hud: CanvasLayer = $HUD
 @onready var level: Node2D = $level
+var damage_controller = preload("res://scripts/damage_coordinator.gd").new()
 
 var cursor_map = {}
 
@@ -26,11 +30,6 @@ const ZOOM_LEVELS = [
 var zoom_idx = 4
 
 var base_cursor = load("res://sprites/cursors/basic.png")
-const BEAM_ATTACK = preload("res://scenes/beam_attack.tscn")
-const METEOR_ATTACK = preload("res://scenes/meteor_attack.tscn")
-
-signal SIG_BEAM_LANDED(landing_point: Vector2)
-signal SIG_METEOR_LANDED(landing_point: Vector2)
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -38,23 +37,19 @@ func _ready() -> void:
 	cursor_map[hud.AC.BASIC] = basic_attack_cursor
 	cursor_map[hud.AC.METEOR] = meteor_attack_cursor
 
+	# Wire things up to the damage controller
 	hud.attack_controller.SIG_BEAM_FIRED.connect(func(target):
 		var beam = BEAM_ATTACK.instantiate()
 		beam.from_point = cmder.position
 		beam.to_point = target
-		beam.world_ref = self
 		attacks_go_here.add_child(beam)
 	)
+
 	hud.attack_controller.SIG_METEOR_FIRED.connect(func(target):
 		var meteor = METEOR_ATTACK.instantiate()
-		meteor.world_ref = self
 		meteor.target_point = target
 		attacks_go_here.add_child(meteor)
 	)
-
-	SIG_BEAM_LANDED.connect(level.process_beam_landing)
-	SIG_METEOR_LANDED.connect(level.process_meteor_landing)
-
 
 
 func _input(event: InputEvent) -> void:
@@ -79,7 +74,9 @@ func _process(delta: float) -> void:
 		target_cursor.global_position = cmder.navigation_agent_2d.target_position
 	
 	for attack_name in hud.attack_controller.cooldowns:
-		if hud.attack_controller.cooldowns[attack_name] > 0:
+		if attack_name == hud.AC.FLAME:
+			continue
+		elif hud.attack_controller.cooldowns[attack_name] > 0:
 			cursor_map[attack_name].position = hud.attack_controller.targets[attack_name]
 			cursor_map[attack_name].visible = true
 		else:

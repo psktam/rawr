@@ -1,7 +1,6 @@
 extends Node2D
 
-const WORLD = preload("res://scenes/game.gd")
-
+const DC = preload("res://scripts/damage_coordinator.gd")
 const MAX_SPEED = 2500.0
 const ACCEL = 5000.0
 const MED_MAX_DISPLACEMENT = 40.0
@@ -16,12 +15,11 @@ var max_range: float = 500.0
 var dist_to_travel: float
 var distance_traveled: float = 0.0
 var time_alive: float = 0.0
-var world_ref: WORLD
 
 @onready var beam_blob_small: Sprite2D = $"Beam-blob"
 @onready var beam_blob_med: Sprite2D = $"Beam-blob-1"
 @onready var beam_blob_big: Sprite2D = $"Beam-blob-0"
-
+@onready var damage_controller: DC = $"/root/game".damage_controller
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -53,7 +51,7 @@ func _physics_process(delta: float) -> void:
 
 	time_alive += delta
 	if distance_traveled >= dist_to_travel:
-		world_ref.SIG_BEAM_LANDED.emit(self.position)
+		damage_controller.BEAM_LANDING.emit(self.position)
 		queue_free()
 
 

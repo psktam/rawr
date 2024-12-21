@@ -1,5 +1,6 @@
 extends Node2D
 
+var DC = preload("res://scripts/damage_coordinator.gd")
 var SP = preload("res://scripts/sprite_poser.gd").new()
 const COM = preload("res://scripts/resources.gd")
 const SPEED = 50.0
