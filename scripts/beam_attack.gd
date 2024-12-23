@@ -51,7 +51,7 @@ func _physics_process(delta: float) -> void:
 
 	time_alive += delta
 	if distance_traveled >= dist_to_travel:
-		damage_controller.BEAM_LANDING.emit(self.position)
+		damage_controller.BEAM_LANDING.emit(self.global_position)
 		queue_free()
 
 

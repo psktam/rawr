@@ -20,5 +20,5 @@ func _physics_process(delta: float) -> void:
 func _process(delta: float) -> void:
 	time_alive_s += delta
 	if time_alive_s >= lifetime_s:
-		damage_controller.METEOR_LANDING.emit(target_point)
+		damage_controller.METEOR_LANDING.emit(target_point, 2000)
 		queue_free()

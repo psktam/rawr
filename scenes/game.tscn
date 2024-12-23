@@ -3,12 +3,220 @@
 [ext_resource type="PackedScene" uid="uid://b1s8asp8w3plb" path="res://scenes/level.tscn" id="1_352t2"]
 [ext_resource type="Script" path="res://scenes/game.gd" id="1_wuqmk"]
 [ext_resource type="PackedScene" uid="uid://dyur53qk36clc" path="res://scenes/cmder.tscn" id="2_hvcja"]
-[ext_resource type="Script" path="res://scripts/cmder.gd" id="3_2eqsb"]
 [ext_resource type="Texture2D" uid="uid://dagwb8b0oc1ph" path="res://sprites/cursors/target-cursor-sheet.png" id="4_a6vrn"]
 [ext_resource type="PackedScene" uid="uid://dfte5p8obfyr" path="res://scenes/hud.tscn" id="6_no60r"]
 [ext_resource type="Texture2D" uid="uid://cbcjtktnkwbok" path="res://sprites/cursors/basic_attack_cursor.png" id="7_y8v5b"]
 [ext_resource type="Texture2D" uid="uid://dxsffyxko4ue" path="res://sprites/cursors/meteor-cursor.png" id="8_wxqq2"]
 [ext_resource type="PackedScene" uid="uid://d1qret8q4g88q" path="res://scenes/noncombatant_civilian.tscn" id="9_lsg84"]
+
+[sub_resource type="GDScript" id="GDScript_7df8j"]
+script/source = "extends CharacterBody2D
+class_name Cmder
+
+const SPEED = 100.0
+const JUMP_VELOCITY = -400.0
+
+# States
+const WALKING = \"walking\"
+const IDLE = \"idle\"
+const BASIC_ATTACK = \"basic_attack\"
+var SP = preload(\"res://scripts/sprite_poser.gd\").new()
+const AC = preload(\"res://scripts/attack_controller.gd\")
+const Fireball = preload(\"res://scenes/fireball.tscn\")
+
+@onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
+@export_category(\"Custom properties\")
+@export var state: String = IDLE
+@export var entering: bool = true
+@export var hud_reference: CanvasLayer
+var display_direction: int = 0
+var navregion: NavigationRegion2D
+@onready var navigation_agent_2d: NavigationAgent2D = $NavigationAgent2D
+var track_button_press = false
+var time_button_pressed_s = 0.0
+var click_ticks = 0
+var tick_time_s = 0.1
+
+################################################################################
+#   					 Code to manage character body motion				   #
+################################################################################
+func _stop_moving() -> void:
+	navigation_agent_2d.set_target_position(self.position)
+
+################################################################################
+#   					       Everything else								   #
+################################################################################
+
+# Okay, let's make an actual state machine here. In each state, physics_process
+# and process and input will all be doing different things.
+func _transition_to_state(target_state: String) -> void:
+	state = target_state
+	entering = true
+
+
+func _check_mouse_click(click: InputEventMouseButton) -> bool:
+	\"\"\"
+	Indicates whether or not the mouse click was in the playing field or on the
+	menu.
+	\"\"\"
+	return click.position.x < get_viewport_rect().size.x - 250
+
+
+# ------- idle state
+func _input_idle(event: InputEvent) -> void:
+	\"\"\"
+	This function should really just focus on setting outputs and transition
+	to states, rather than directly handling behaviors. Those attitudes will
+	be dealt with in the relevant _xxx_process functions.
+	\"\"\"
+	if event is InputEventMouseButton and _check_mouse_click(event):
+		if event.button_index == MOUSE_BUTTON_RIGHT and event.is_released():
+			navigation_agent_2d.set_target_position(get_global_mouse_position())
+			_transition_to_state(WALKING)
+		
+		elif (
+			event.button_index == MOUSE_BUTTON_LEFT and 
+			hud_reference.attack_controller.ready_for_attack()
+		):
+			if hud_reference.attack_controller.selected_attack == AC.FLAME:
+				if event.is_pressed():
+					track_button_press = true
+					time_button_pressed_s = 0.0
+					click_ticks = 0
+				elif event.is_released():
+					track_button_press = false
+			else:
+				if event.is_released() and hud_reference.attack_controller.fire(get_global_mouse_position()):
+					_transition_to_state(BASIC_ATTACK)
+
+func _physics_process_idle(delta: float) -> void:
+	entering = false
+	self.velocity = Vector2.ZERO
+
+func _process_idle(delta: float) -> void:
+	_stop_moving()
+	entering = false
+
+	# Just make sure that we're not actually doing anything
+	animated_sprite_2d.animation = \"idle-%d\" % display_direction
+	animated_sprite_2d.play()
+
+	# Handle flamethrowing
+	if track_button_press:
+		time_button_pressed_s += delta
+		if (click_ticks * tick_time_s) < time_button_pressed_s:
+			click_ticks += 1
+			var new_fire = Fireball.instantiate()
+			new_fire.position = position
+			new_fire.target_loc = get_global_mouse_position()
+			$\"/root/game/attacksGoHere\".add_child(new_fire)
+
+
+# ------- walking state
+func _input_walking(event: InputEvent) -> void:
+	if event is InputEventMouseButton and _check_mouse_click(event):
+		if event.button_index == MOUSE_BUTTON_RIGHT and event.is_released():
+			navigation_agent_2d.set_target_position(get_global_mouse_position())
+		elif (
+			event.button_index == MOUSE_BUTTON_LEFT and 
+			event.is_released() and 
+			hud_reference.attack_controller.ready_for_attack()
+		):
+			if hud_reference.attack_controller.fire(get_global_mouse_position()):
+				_transition_to_state(BASIC_ATTACK)
+	elif event is InputEventKey:
+		if event.keycode == KEY_S:
+			_transition_to_state(IDLE)
+
+func _physics_process_walking(delta: float) -> void:
+	entering = false
+	
+	# Do not query when the map has never synchronized and is empty.
+	if NavigationServer2D.map_get_iteration_id(navigation_agent_2d.get_navigation_map()) == 0:
+		return
+	
+	if not navigation_agent_2d.is_navigation_finished():
+		var next_path_position = navigation_agent_2d.get_next_path_position()
+		var new_velocity = global_position.direction_to(next_path_position) * SPEED
+		velocity = new_velocity
+		move_and_slide()
+	else: 
+		self.velocity = Vector2.ZERO
+		_transition_to_state(IDLE)
+
+func _process_walking(delta: float) -> void:
+	display_direction = SP.get_view_name(velocity.angle() * 180.0 / PI)
+	animated_sprite_2d.animation = \"walk-%d\" % display_direction
+	animated_sprite_2d.play()
+
+
+# ------- basic attack state
+func _input_basic_attack(event: InputEvent) -> void:
+	if event is InputEventMouseButton and _check_mouse_click(event):
+		if event.button_index == MOUSE_BUTTON_RIGHT:
+			navigation_agent_2d.set_target_position(get_global_mouse_position())
+
+
+func _physics_process_basic_attack(delta: float) -> void:
+	self.velocity = Vector2.ZERO
+
+func _process_basic_attack(delta: float) -> void:
+	if entering:
+		var ac = hud_reference.attack_controller
+		var target_location = ac.targets[ac.selected_attack]
+		display_direction = SP.get_view_name((target_location - self.position).angle() * 180.0 / PI)
+		# Make the character face the direction of the click
+		animated_sprite_2d.animation = \"idle-%d\" % display_direction
+		animated_sprite_2d.play()
+
+	if hud_reference.attack_controller.can_walk():
+		if navigation_agent_2d.is_navigation_finished():
+			_transition_to_state(IDLE)
+		else:
+			_transition_to_state(WALKING)
+
+
+################################################################################
+# 							  Dispatching functions							   #
+################################################################################
+func _input(event: InputEvent) -> void:
+	if state == IDLE:
+		_input_idle(event)
+	elif state == WALKING:
+		_input_walking(event)
+	elif state == BASIC_ATTACK:
+		_input_basic_attack(event)
+	else:
+		print(\"Unrecognized input state %s\" % state)
+
+
+func _physics_process(delta: float) -> void:
+	if state == IDLE:
+		_physics_process_idle(delta)
+	elif state == WALKING:
+		_physics_process_walking(delta)
+	elif state == BASIC_ATTACK:
+		_physics_process_basic_attack(delta)
+	else:
+		print(\"Unrecognized physics state %s\" % state)
+
+
+func _process(delta: float) -> void:
+	if state == IDLE:
+		_process_idle(delta)
+	elif state == WALKING:
+		_process_walking(delta)
+	elif state == BASIC_ATTACK:
+		_process_basic_attack(delta)
+	else:
+		print(\"Unrecognized processing state: %s\" % state)
+	if entering:
+		entering = false
+
+func _ready() -> void:
+	entering = true
+	_stop_moving()
+"
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_s1vf1"]
 atlas = ExtResource("4_a6vrn")
@@ -127,7 +335,7 @@ z_index = 1
 
 [node name="cmder" parent="." node_paths=PackedStringArray("hud_reference") instance=ExtResource("2_hvcja")]
 position = Vector2(23, -81)
-script = ExtResource("3_2eqsb")
+script = SubResource("GDScript_7df8j")
 hud_reference = NodePath("../HUD")
 
 [node name="playerCamera" type="Camera2D" parent="cmder"]
@@ -160,16 +368,4 @@ autoplay = "default"
 [node name="level" parent="." instance=ExtResource("1_352t2")]
 
 [node name="noncombatantCivilian" parent="." instance=ExtResource("9_lsg84")]
-position = Vector2(-168, 116)
-
-[node name="noncombatantCivilian2" parent="." instance=ExtResource("9_lsg84")]
-position = Vector2(-61, 160)
-
-[node name="noncombatantCivilian3" parent="." instance=ExtResource("9_lsg84")]
-position = Vector2(-86, 61)
-
-[node name="noncombatantCivilian4" parent="." instance=ExtResource("9_lsg84")]
-position = Vector2(-72, 118)
-
-[node name="noncombatantCivilian5" parent="." instance=ExtResource("9_lsg84")]
-position = Vector2(-3, 123)
+position = Vector2(32, 69)

@@ -21,7 +21,7 @@ func _process(delta: float) -> void:
 	position = (position + target_loc) * 0.5
 	if lifetime_s > (ticks_so_far * tick_dur_s):
 		ticks_so_far += 1
-		damage_controller.BURN.emit(global_position, 10)
+		damage_controller.BURN.emit(global_position, 2)
 
 	if lifetime_s > max_burn_time_s:
 		queue_free()
