@@ -4,11 +4,11 @@ const BEAM_ATTACK = preload("res://scenes/beam_attack.tscn")
 const METEOR_ATTACK = preload("res://scenes/meteor_attack.tscn")
 
 @onready var attacks_go_here: Node2D = $attacksGoHere
-@onready var cmder = $cmder
+@onready var cmder = $world/cmder
 @onready var target_cursor: AnimatedSprite2D = $targetCursor
 @onready var basic_attack_cursor: AnimatedSprite2D = $basicAttackCursor
 @onready var meteor_attack_cursor: AnimatedSprite2D = $meteorAttackCursor
-@onready var player_camera: Camera2D = $cmder/playerCamera
+@onready var player_camera: Camera2D = $world/cmder/playerCamera
 @onready var hud: CanvasLayer = $HUD
 @onready var level: Node2D = $level
 var damage_controller = preload("res://scripts/damage_coordinator.gd").new()

@@ -2,7 +2,20 @@ class_name NPCUtils
 
 
 static func get_nav_layer(n: Node2D) -> TileMapLayer:
-	return n.get_node("/root/game/level").level_0
+	return n.get_node("/root/game/world/level").level_0
+
+
+"""
+Get the distance between the two nodes in tilemap units, 
+not pixel units.
+"""
+static func tilemap_dist(
+	nav_layer: TileMapLayer, n0: Node2D, n1: Node2D
+) -> float:
+	return (
+		nav_layer.local_to_map(nav_layer.to_local(n0.global_position)) - 
+		nav_layer.local_to_map(nav_layer.to_local(n1.global_position))
+	).length()
 
 
 """
@@ -81,7 +94,7 @@ static func pick_random_target(
 	return shortest_path[-1]
 
 ################################################################################ 
-#                            Class-related methods                             #
+#							Class-related methods							 #
 ################################################################################ 
 var persistent_threats = []
 var spontaneous_threats = []

@@ -3,6 +3,7 @@ extends Node2D
 const DC = preload("res://scripts/damage_coordinator.gd")
 var SP = preload("res://scripts/sprite_poser.gd").new()
 const COM = preload("res://scripts/resources.gd")
+const PM = preload("res://scripts/policeman.gd")
 const SPEED = 10.0
 @onready var navigator: NavigationAgent2D = $navigator
 @onready var body_area: Area2D = $bodyArea
@@ -20,16 +21,12 @@ enum State {
 
 # Stateful variables
 @export var state: State = State.IDLE
-# This variable is set to True anytime this node processes a signal. We may need
-# to sometimes force transitions into other states based on the signal.
-var signal_override = false
 # This variable will be set to true if it's the first cycle in a given state.
 # Useful for processing transitory behavior. States should never set this 
 # variable themselves, and you should pretty much never read entering_set
 var prev_state: State = State.IDLE
 var prev_physics_state: State = prev_state
 
-var ticker = 0
 # Time spent in the current state so far
 var time_in_state_s: float = 0.0
 
@@ -86,12 +83,13 @@ func _physics_process_fleeing(delta: float) -> void:
 		navigator.set_target_position(flee_target)
 
 	var next_pos = navigator.get_next_path_position()
-	var new_vel = global_position.direction_to(next_pos) * SPEED
+	var new_vel = global_position.direction_to(next_pos) * SPEED * 1.1
 	display_direction = SP.get_view_name(new_vel.angle() * 180.0 / PI)
-	var movement_delta = SPEED * delta
+	var movement_delta = SPEED * delta * 1.1
 	global_position = global_position.move_toward(
 		global_position + new_vel, movement_delta
 	)
+
 
 func _process_fleeing(delta: float) -> void:
 	animated_sprite_2d.animation = "walk-%d" % display_direction
@@ -107,10 +105,10 @@ func _process_fleeing(delta: float) -> void:
 func _ready() -> void:
 	var damage_controller: DC = $"/root/game".damage_controller
 	damage_controller.BEAM_LANDING.connect(_on_beam_landing)
+	damage_controller.METEOR_LANDING.connect(_on_meteor_landing)
 
 
 func _physics_process(delta: float) -> void:
-	ticker += 1
 	if state == State.IDLE:
 		_physics_process_idle(delta)
 	elif state == State.FLEEING:
@@ -132,8 +130,11 @@ func _process(delta: float) -> void:
 #						   Signal dispatching functions						   #
 ################################################################################
 func _on_vision_area_area_entered(area: Area2D) -> void:
-	if area.get_parent() == cmder:
+	var agent = area.get_parent()
+	if agent == cmder:
 		threat_tracker.add_new_threat(cmder, 10)
+	elif agent is PM:
+		threat_tracker.add_new_threat(agent, 1)
 
 
 func _on_vision_area_area_exited(area: Area2D) -> void:
@@ -143,10 +144,12 @@ func _on_vision_area_area_exited(area: Area2D) -> void:
 
 func _on_beam_landing(landing_point: Vector2) -> void:
 	threat_tracker.add_ephemeral_threat(landing_point, 15)
+
+
+func _on_meteor_landing(landing_point: Vector2, landing_base_damage: int) -> void:
+	threat_tracker.add_ephemeral_threat(landing_point, landing_base_damage)
 	
 
 ################################################################################
 #					   Utility functions for this class only					#
 ################################################################################
-# Assess this threat against the current threat, and set it if it's moar 
-# threatening
