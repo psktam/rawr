@@ -9,7 +9,9 @@ const SPEED = 10.0
 @onready var body_area: Area2D = $bodyArea
 @onready var vision_area: Area2D = $visionArea
 @onready var cmder: CharacterBody2D = $"../cmder"
+@onready var civvies: Node2D = $"/root/game/world/civilians"
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
+@onready var navlayer = NPCUtils.get_nav_layer(self)
 
 enum State {
 	IDLE,
@@ -22,6 +24,7 @@ enum State {
 
 # Stateful variables
 @export var state: State = State.IDLE
+var next_state: State = State.IDLE
 # This variable will be set to true if it's the first cycle in a given state.
 # Useful for processing transitory behavior. States should never set this 
 # variable themselves, and you should pretty much never read entering_set
@@ -38,7 +41,13 @@ var current_threat: Threats.ThreatInfo = null
 
 var display_direction: int = 0
 var threat_tracker = Threats.new()
-var target_tracker = Targets.new()
+@onready var target_tracker = Targets.new(
+	self,
+	2,
+	3,
+	navlayer,
+	func (_tt): return 10
+)
 var CC = preload("res://scripts/cyclical_functions.gd").new()
 
 
@@ -51,13 +60,17 @@ func is_new_physics_state() -> bool:
 
 
 func transition_to_state(target_state: State) -> void:
-	print("Transitioning from ", state, " to ", target_state)
-	state = target_state
+	print(Time.get_ticks_msec(), ": Transitioning from ", state, " to ", target_state)
+	next_state = target_state
 
 
 # ----------------------------- idle state -------------------------------------
 func _physics_process_idle(delta: float) -> void:
-	pass
+	CC.cyclical_call(
+		"target_recalc",
+		2000,
+		func (): target_tracker.refresh_targets([civvies])
+	)
 
 
 func _process_idle(delta: float) -> void:
@@ -109,19 +122,19 @@ func _process_fleeing(delta: float) -> void:
 func _physics_process_staredown(delta: float) -> void:
 	# First make sure that the target is still valid. The non-physics process
 	# function will handle the state transition
-	if target_tracker.current_target == null:
+	if target_tracker.get_current_target() == null:
 		return
 
 	CC.cyclical_call(
 		"target_recalc",
 		2000,
-		func (): target_tracker.set_target(global_position)
+		func (): target_tracker.refresh_targets([civvies])
 	)
 
 	# Always just make sure we're facing the target
 	display_direction = SP.get_view_name(
 		(
-			target_tracker.current_target.global_position -
+			target_tracker.get_current_target().global_position -
 			global_position
 		).angle() * 180 / PI
 	)
@@ -129,15 +142,15 @@ func _physics_process_staredown(delta: float) -> void:
 
 func _process_staredown(delta: float) -> void:
 	# First, just make sure that the target is still valid
-	if target_tracker.current_target == null:
+	if target_tracker.get_current_target() == null:
 		transition_to_state(State.IDLE)
 		return
 
-	elif NPCUtils.tilemap_dist(
+	elif NPCUtils.tilemap_dist2(
 		NPCUtils.get_nav_layer(self),
-		self,
-		target_tracker.current_target
-	) < 2:
+		global_position,
+		target_tracker.get_current_target().global_position
+	) < 4:
 		transition_to_state(State.PURSUING)
 
 	animated_sprite_2d.animation = "idle-%d" % display_direction
@@ -160,13 +173,13 @@ func _physics_process_pursuing(delta: float) -> void:
 	CC.cyclical_call(
 		"target_recalc",
 		2000,
-		func (): target_tracker.set_target(global_position)
+		func (): target_tracker.refresh_targets([civvies])
 	)
 	CC.cyclical_call(
 		"nav_update",
 		5000,
 		func (): navigator.set_target_position(
-				target_tracker.current_target.global_position
+				target_tracker.get_current_target().global_position
 		)
 	)
 	next_pos = navigator.get_next_path_position()
@@ -182,40 +195,68 @@ func _process_pursuing(delta: float) -> void:
 	animated_sprite_2d.animation = "walk-%d" % display_direction
 	animated_sprite_2d.play()
 
+	var dist2_target = NPCUtils.tilemap_dist2(
+		navlayer,
+		global_position,
+		target_tracker.get_current_target().global_position
+	)
+	var inrange = CC.t_on(
+		"in-attacking-range",
+		dist2_target <= 1,
+		1000,
+		is_new_state()
+	)
+
 	if not target_tracker.has_target():
 		transition_to_state(State.IDLE)
 		return
-	elif NPCUtils.tilemap_dist(
-			NPCUtils.get_nav_layer(self),
-			self,
-			target_tracker.current_target
-	) <= 1:
+
+	if inrange:
+		print(CC.t_ons["in-attacking-range"])
 		transition_to_state(State.ATTACKING)
 
 
 # ---------------------------- attacking state ---------------------------------
 func _physics_process_attacking(delta: float) -> void:
+	if not target_tracker.has_target():
+		return
+
 	display_direction = SP.get_view_name(
 		(
-			target_tracker.current_target.global_position -
+			target_tracker.get_current_target().global_position -
 			global_position
 		).angle() * 180 / PI
 	)
 
 
 func _process_attacking(delta: float) -> void:
+	# In the future, we'll play the attacking animation here instead. If we need
+	# to reorient in the middle of the animation, we'll need to keep track of
+	# which frame we were on and make the switch.
 	animated_sprite_2d.animation = "idle-%d" % display_direction
 	animated_sprite_2d.play()
 
 	if not target_tracker.has_target():
 		transition_to_state(State.IDLE)
 		return
-	elif NPCUtils.tilemap_dist(
+	elif NPCUtils.tilemap_dist2(
 			NPCUtils.get_nav_layer(self),
-			self,
-			target_tracker.current_target
+			self.global_position,
+			target_tracker.get_current_target().global_position
 	) >= 1:
 		transition_to_state(State.PURSUING)
+		return
+
+	# Otherwise, we actually attack our target
+	CC.cyclical_call(
+		"attack",
+		1000,
+		func (): 
+			if target_tracker.get_current_target() is NC:
+				target_tracker.get_current_target().inflict_damage(
+					self, 34)
+	)
+
 
 
 ################################################################################
@@ -223,6 +264,7 @@ func _process_attacking(delta: float) -> void:
 ################################################################################
 func _ready() -> void:
 	var damage_controller: DC = $"/root/game".damage_controller
+	print(civvies)
 	damage_controller.BEAM_LANDING.connect(_on_beam_landing)
 	damage_controller.METEOR_LANDING.connect(_on_meteor_landing)
 
@@ -255,36 +297,19 @@ func _process(delta: float) -> void:
 		_process_attacking(delta)
 
 	prev_state = state
+	state = next_state
 
 
 ################################################################################
 #						   Signal dispatching functions						   #
 ################################################################################
-func _on_vision_area_area_entered(area: Area2D) -> void:
-	var agent = area.get_parent()
-	if agent == cmder:
-		threat_tracker.add_new_threat(cmder, 10)
-	elif agent is NC:
-		target_tracker.add_target(agent, 10)
-		target_tracker.set_target(global_position)
-
-
-func _on_vision_area_area_exited(area: Area2D) -> void:
-	var agent = area.get_parent()
-	if agent == cmder:
-		threat_tracker.remove_threat(cmder)
-	elif agent is NC:
-		target_tracker.remove_target(agent, global_position)
-
-
 func _on_beam_landing(landing_point: Vector2) -> void:
-	# threat_tracker.add_ephemeral_threat(landing_point, 15)
-	return
+	if NPCUtils.tilemap_dist2(navlayer, global_position, landing_point) <= 4:
+		threat_tracker.add_ephemeral_threat(landing_point, 15)
 
 
 func _on_meteor_landing(landing_point: Vector2, landing_base_damage: int) -> void:
 	threat_tracker.add_ephemeral_threat(landing_point, landing_base_damage)
-
 
 ################################################################################
 #						   Internal utility functions                          #

@@ -375,11 +375,26 @@ y_sort_enabled = true
 position = Vector2(3, 5)
 
 [node name="noncombatantCivilian" parent="world/civilians" instance=ExtResource("9_lsg84")]
-position = Vector2(-69, 53)
+position = Vector2(-23, 89)
+
+[node name="noncombatantCivilian2" parent="world/civilians" instance=ExtResource("9_lsg84")]
+position = Vector2(48, 50)
+
+[node name="noncombatantCivilian3" parent="world/civilians" instance=ExtResource("9_lsg84")]
+position = Vector2(-24, 38)
+
+[node name="noncombatantCivilian4" parent="world/civilians" instance=ExtResource("9_lsg84")]
+position = Vector2(53, 58)
 
 [node name="police" type="Node2D" parent="world"]
 y_sort_enabled = true
 position = Vector2(3, 5)
+
+[node name="policeman2" parent="world/police" instance=ExtResource("9_01fc6")]
+position = Vector2(-64, 143)
+
+[node name="policeman3" parent="world/police" instance=ExtResource("9_01fc6")]
+position = Vector2(-35, 183)
 
 [node name="policeman" parent="world/police" instance=ExtResource("9_01fc6")]
 y_sort_enabled = true

@@ -2354,14 +2354,6 @@ offset = Vector2(0, -14)
 [node name="navigator" type="NavigationAgent2D" parent="."]
 debug_enabled = true
 
-[node name="visionArea" type="Area2D" parent="."]
-collision_layer = 0
-collision_mask = 5
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="visionArea"]
-visible = false
-polygon = PackedVector2Array(200, 0, 173, 50, 100, 87, 0, 100, -100, 87, -173, 50, -200, 0, -173, -50, -100, -87, 0, -100, 100, -87, 173, -50)
-
 [node name="bodyArea" type="Area2D" parent="."]
 collision_layer = 2
 collision_mask = 0
@@ -2369,6 +2361,3 @@ collision_mask = 0
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="bodyArea"]
 visible = false
 polygon = PackedVector2Array(10, 0, 9, 2, 5, 4, 0, 5, -5, 4, -9, 2, -10, 0, -9, -2, -5, -4, 0, -5, 5, -4, 9, -2)
-
-[connection signal="area_entered" from="visionArea" to="." method="_on_vision_area_area_entered"]
-[connection signal="area_exited" from="visionArea" to="." method="_on_vision_area_area_exited"]

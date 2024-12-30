@@ -5,12 +5,14 @@ var SP = preload("res://scripts/sprite_poser.gd").new()
 const COM = preload("res://scripts/resources.gd")
 const PM = preload("res://scripts/policeman.gd")
 const SPEED = 10.0
+var health = 100
 @onready var navigator: NavigationAgent2D = $navigator
-@onready var body_area: Area2D = $bodyArea
-@onready var vision_area: Area2D = $visionArea
-@onready var cmder: CharacterBody2D = $"../cmder"
+@onready var cmder: CharacterBody2D = $"../../cmder"
+@onready var popos: Node2D = $"../police"
+@onready var navlayer = NPCUtils.get_nav_layer(self)
 # Map enemy node -> location Vector2
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
+var attacker: Node2D = null
 
 enum State {
 	IDLE,
@@ -21,6 +23,7 @@ enum State {
 
 # Stateful variables
 @export var state: State = State.IDLE
+var next_state: State = State.IDLE
 # This variable will be set to true if it's the first cycle in a given state.
 # Useful for processing transitory behavior. States should never set this 
 # variable themselves, and you should pretty much never read entering_set
@@ -48,7 +51,7 @@ func is_new_physics_state() -> bool:
 
 
 func transition_to_state(target_state: State) -> void:
-	state = target_state
+	next_state = target_state
 
 
 # ----------------------------- idle state -------------------------------------
@@ -73,7 +76,7 @@ func _physics_process_fleeing(delta: float) -> void:
 		var flee_dir = threat_tracker.get_flee_direction(global_position)
 		# Get a new place to run away to
 		var flee_target = NPCUtils.pick_random_target(
-			NPCUtils.get_nav_layer(self),
+			navlayer,
 			navigator,
 			5, 
 			self.position,
@@ -95,7 +98,7 @@ func _process_fleeing(delta: float) -> void:
 	animated_sprite_2d.animation = "walk-%d" % display_direction
 	animated_sprite_2d.play()
 
-	if time_in_state_s >= flee_dur or navigator.is_navigation_finished():
+	if time_in_state_s >= flee_dur:
 		transition_to_state(State.IDLE)
 
 
@@ -109,6 +112,7 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
+	_track_me()
 	if state == State.IDLE:
 		_physics_process_idle(delta)
 	elif state == State.FLEEING:
@@ -118,30 +122,22 @@ func _physics_process(delta: float) -> void:
 
 
 func _process(delta: float) -> void:
+	if health <= 0:
+		print("I'm dying, I'm dying, what a world, what a world")
+		self.queue_free()
+
 	if state == State.IDLE:
 		_process_idle(delta)
 	elif state == State.FLEEING:
 		_process_fleeing(delta)
 
 	prev_state = state
+	state = next_state
 
 
 ################################################################################
 #						   Signal dispatching functions						   #
 ################################################################################
-func _on_vision_area_area_entered(area: Area2D) -> void:
-	var agent = area.get_parent()
-	if agent == cmder:
-		threat_tracker.add_new_threat(cmder, 10)
-	elif agent is PM:
-		threat_tracker.add_new_threat(agent, 1)
-
-
-func _on_vision_area_area_exited(area: Area2D) -> void:
-	if area.get_parent() == cmder:
-		threat_tracker.remove_threat(cmder)
-
-
 func _on_beam_landing(landing_point: Vector2) -> void:
 	threat_tracker.add_ephemeral_threat(landing_point, 15)
 
@@ -153,3 +149,22 @@ func _on_meteor_landing(landing_point: Vector2, landing_base_damage: int) -> voi
 ################################################################################
 #					   Utility functions for this class only					#
 ################################################################################
+func _track_me():
+	var dist2 = NPCUtils.tilemap_dist2(
+		navlayer, self.global_position, cmder.global_position)
+	if dist2 <= 4:
+		threat_tracker.add_new_threat(cmder, 5)
+	else:
+		threat_tracker.remove_threat(cmder)
+
+
+func inflict_damage(attacker_: Node2D, damage: int) -> void:
+	print("Ow, you hurt me for ", damage, " damage")
+	health -= damage
+	attacker = attacker_
+
+	# Add the attacker as a threat
+	threat_tracker.add_ephemeral_threat(
+		attacker_.global_position,
+		10
+	)

@@ -9,13 +9,13 @@ static func get_nav_layer(n: Node2D) -> TileMapLayer:
 Get the distance between the two nodes in tilemap units, 
 not pixel units.
 """
-static func tilemap_dist(
-	nav_layer: TileMapLayer, n0: Node2D, n1: Node2D
+static func tilemap_dist2(
+	nav_layer: TileMapLayer, p0: Vector2, p1:Vector2
 ) -> float:
 	return (
-		nav_layer.local_to_map(nav_layer.to_local(n0.global_position)) - 
-		nav_layer.local_to_map(nav_layer.to_local(n1.global_position))
-	).length()
+		nav_layer.local_to_map(nav_layer.to_local(p0)) -
+		nav_layer.local_to_map(nav_layer.to_local(p1))
+	).length_squared()
 
 
 """
