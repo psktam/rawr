@@ -76,7 +76,7 @@ func _physics_process_fleeing(delta: float) -> void:
 	if is_new_physics_state() or threat_tracker.has_new_threat:
 		var flee_dir = threat_tracker.get_flee_direction(global_position)
 		# Get a new place to run away to
-		var flee_target = NPCUtils.pick_random_target(
+		var flee_target = NPCUtils.pick_random_nav_dest(
 			NPCUtils.get_nav_layer(self),
 			navigator,
 			5, 

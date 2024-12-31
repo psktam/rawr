@@ -2345,6 +2345,7 @@ animations = [{
 script = ExtResource("1_oy36l")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+modulate = Color(0, 0.452426, 0.930502, 1)
 position = Vector2(-1, -17)
 sprite_frames = SubResource("SpriteFrames_mp8ib")
 animation = &"idle-315"

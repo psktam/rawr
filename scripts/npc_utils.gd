@@ -55,7 +55,7 @@ Returns:
 	Vector2 of target point (in global coordinates) that represents the 
 		closest place to go
 """
-static func pick_random_target(
+static func pick_random_nav_dest(
 	nav_layer: TileMapLayer,
 	agent: NavigationAgent2D, 
 	n_trials: int, 
@@ -102,26 +102,3 @@ var cmder: Node2D
 
 func _init(_cmder: Node2D) -> void:
 	cmder = _cmder
-
-# This function is called when a spontaneous/ephemeral threat occurs, such 
-# as a building exploding, or a meteor/beam landing. This function indicates 
-# whether or not the agent calling this function needs to react to it
-func assess_threats(
-	threat_map: Dictionary
-) -> Threats.ThreatInfo:
-	var all_threats = persistent_threats + spontaneous_threats
-	spontaneous_threats = []
-
-	if len(all_threats) == 0:
-		return null
-
-	var biggest_threat = all_threats[0]
-	for ix in range(1, len(all_threats)):
-		var threat = all_threats[ix]
-		if threat_map[threat.Type] > threat_map[biggest_threat.Type]:
-			biggest_threat = threat
-	
-	if biggest_threat.Type == Threats.Threat.ME:
-		biggest_threat.Loc = cmder.global_position
-
-	return biggest_threat

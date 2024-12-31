@@ -8,10 +8,12 @@ const SPEED = 10.0
 @onready var navigator: NavigationAgent2D = $navigator
 @onready var body_area: Area2D = $bodyArea
 @onready var vision_area: Area2D = $visionArea
-@onready var cmder: CharacterBody2D = $"../cmder"
+@onready var cmder: CharacterBody2D = $"/root/game/world/cmder"
 @onready var civvies: Node2D = $"/root/game/world/civilians"
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
 @onready var navlayer = NPCUtils.get_nav_layer(self)
+var health = 100
+var attacker: Node2D = null
 
 enum State {
 	IDLE,
@@ -60,7 +62,6 @@ func is_new_physics_state() -> bool:
 
 
 func transition_to_state(target_state: State) -> void:
-	print(Time.get_ticks_msec(), ": Transitioning from ", state, " to ", target_state)
 	next_state = target_state
 
 
@@ -91,7 +92,7 @@ func _physics_process_fleeing(delta: float) -> void:
 	if is_new_physics_state() or threat_tracker.has_new_threat:
 		var flee_dir = threat_tracker.get_flee_direction(global_position)
 		# Get a new place to run away to
-		var flee_target = NPCUtils.pick_random_target(
+		var flee_target = NPCUtils.pick_random_nav_dest(
 			NPCUtils.get_nav_layer(self),
 			navigator,
 			5, 
@@ -212,7 +213,6 @@ func _process_pursuing(delta: float) -> void:
 		return
 
 	if inrange:
-		print(CC.t_ons["in-attacking-range"])
 		transition_to_state(State.ATTACKING)
 
 
@@ -264,7 +264,6 @@ func _process_attacking(delta: float) -> void:
 ################################################################################
 func _ready() -> void:
 	var damage_controller: DC = $"/root/game".damage_controller
-	print(civvies)
 	damage_controller.BEAM_LANDING.connect(_on_beam_landing)
 	damage_controller.METEOR_LANDING.connect(_on_meteor_landing)
 
@@ -285,6 +284,10 @@ func _physics_process(delta: float) -> void:
 
 
 func _process(delta: float) -> void:
+	if health <= 0:
+		self.queue_free()
+		return
+
 	if state == State.IDLE:
 		_process_idle(delta)
 	elif state == State.FLEEING:
@@ -304,13 +307,38 @@ func _process(delta: float) -> void:
 #						   Signal dispatching functions						   #
 ################################################################################
 func _on_beam_landing(landing_point: Vector2) -> void:
-	if NPCUtils.tilemap_dist2(navlayer, global_position, landing_point) <= 4:
-		threat_tracker.add_ephemeral_threat(landing_point, 15)
+	# Only respond to the threat if it's in range
+	var landing_dist2 = NPCUtils.tilemap_dist2(
+		navlayer, global_position, landing_point
+	)
+
+	if landing_dist2 > 9:
+		return
+
+	threat_tracker.add_ephemeral_threat(landing_point, 15)
+	inflict_damage(cmder, 100 / max(1, landing_dist2))
 
 
 func _on_meteor_landing(landing_point: Vector2, landing_base_damage: int) -> void:
+	var landing_dist2 = NPCUtils.tilemap_dist2(
+		navlayer, global_position, landing_point
+	)
+
+	if landing_dist2 > 25:
+		return
+
 	threat_tracker.add_ephemeral_threat(landing_point, landing_base_damage)
+	inflict_damage(cmder, landing_base_damage / max(1, landing_dist2))
 
 ################################################################################
 #						   Internal utility functions                          #
 ################################################################################
+func inflict_damage(attacker_: Node2D, damage: int) -> void:
+	health -= damage
+	attacker = attacker_
+
+	# Add the attacker as a threat
+	threat_tracker.add_ephemeral_threat(
+		attacker_.global_position,
+		10
+	)

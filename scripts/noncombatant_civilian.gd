@@ -7,8 +7,8 @@ const PM = preload("res://scripts/policeman.gd")
 const SPEED = 10.0
 var health = 100
 @onready var navigator: NavigationAgent2D = $navigator
-@onready var cmder: CharacterBody2D = $"../../cmder"
-@onready var popos: Node2D = $"../police"
+@onready var cmder: CharacterBody2D = $"/root/game/world/cmder"
+@onready var popos: Node2D = $"/root/game/world/police"
 @onready var navlayer = NPCUtils.get_nav_layer(self)
 # Map enemy node -> location Vector2
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
@@ -75,7 +75,7 @@ func _physics_process_fleeing(delta: float) -> void:
 	if is_new_physics_state() or threat_tracker.has_new_threat:
 		var flee_dir = threat_tracker.get_flee_direction(global_position)
 		# Get a new place to run away to
-		var flee_target = NPCUtils.pick_random_target(
+		var flee_target = NPCUtils.pick_random_nav_dest(
 			navlayer,
 			navigator,
 			5, 
@@ -123,8 +123,8 @@ func _physics_process(delta: float) -> void:
 
 func _process(delta: float) -> void:
 	if health <= 0:
-		print("I'm dying, I'm dying, what a world, what a world")
 		self.queue_free()
+		return
 
 	if state == State.IDLE:
 		_process_idle(delta)
@@ -139,11 +139,28 @@ func _process(delta: float) -> void:
 #						   Signal dispatching functions						   #
 ################################################################################
 func _on_beam_landing(landing_point: Vector2) -> void:
+	# Only respond to the threat if it's in range
+	var landing_dist2 = NPCUtils.tilemap_dist2(
+		navlayer, global_position, landing_point
+	)
+
+	if landing_dist2 > 9:
+		return
+
 	threat_tracker.add_ephemeral_threat(landing_point, 15)
+	inflict_damage(cmder, 100 / max(1, landing_dist2))
 
 
 func _on_meteor_landing(landing_point: Vector2, landing_base_damage: int) -> void:
+	var landing_dist2 = NPCUtils.tilemap_dist2(
+		navlayer, global_position, landing_point
+	)
+
+	if landing_dist2 > 25:
+		return
+
 	threat_tracker.add_ephemeral_threat(landing_point, landing_base_damage)
+	inflict_damage(cmder, landing_base_damage / max(1, landing_dist2))
 	
 
 ################################################################################
@@ -159,7 +176,6 @@ func _track_me():
 
 
 func inflict_damage(attacker_: Node2D, damage: int) -> void:
-	print("Ow, you hurt me for ", damage, " damage")
 	health -= damage
 	attacker = attacker_
 
