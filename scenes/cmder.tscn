@@ -1,5 +1,6 @@
-[gd_scene load_steps=594 format=3 uid="uid://dyur53qk36clc"]
+[gd_scene load_steps=595 format=3 uid="uid://dyur53qk36clc"]
 
+[ext_resource type="Script" path="res://scripts/cmder.gd" id="1_ck40h"]
 [ext_resource type="Texture2D" uid="uid://c28qrrm2xpkgk" path="res://sprites/bullgator/bullgator-walk-view-0.png" id="1_fbjlr"]
 [ext_resource type="Texture2D" uid="uid://ba32kerk8oroa" path="res://sprites/bullgator/bullgator-idle-view-0.png" id="1_j3wbu"]
 [ext_resource type="Texture2D" uid="uid://saj5umiq7hkd" path="res://sprites/bullgator/bullgator-walk-view-135.png" id="2_6u4io"]
@@ -4135,6 +4136,7 @@ animations = [{
 [node name="cmder" type="CharacterBody2D"]
 y_sort_enabled = true
 motion_mode = 1
+script = ExtResource("1_ck40h")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." groups=["agent"]]
 y_sort_enabled = true

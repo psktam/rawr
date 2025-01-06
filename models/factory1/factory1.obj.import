@@ -1,0 +1,22 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://31036nn3ip5x"
+path="res://.godot/imported/factory1.obj-869bf6910b73948a0f64459cc71740e2.mesh"
+
+[deps]
+
+files=["res://.godot/imported/factory1.obj-869bf6910b73948a0f64459cc71740e2.mesh"]
+
+source_file="res://models/factory1/factory1.obj"
+dest_files=["res://.godot/imported/factory1.obj-869bf6910b73948a0f64459cc71740e2.mesh", "res://.godot/imported/factory1.obj-869bf6910b73948a0f64459cc71740e2.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true
+force_disable_mesh_compression=false

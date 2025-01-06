@@ -3,7 +3,7 @@ extends Node2D
 const BEAM_ATTACK = preload("res://scenes/beam_attack.tscn")
 const METEOR_ATTACK = preload("res://scenes/meteor_attack.tscn")
 
-@onready var attacks_go_here: Node2D = $attacksGoHere
+@onready var attacks_go_here: Node2D = $world/attacksGoHere
 @onready var cmder = $world/cmder
 @onready var target_cursor: AnimatedSprite2D = $targetCursor
 @onready var basic_attack_cursor: AnimatedSprite2D = $basicAttackCursor

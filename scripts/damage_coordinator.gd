@@ -9,7 +9,7 @@ signal BURN(location: Vector2, heat: int)
 
 # Similar to the BURN signal. It indicates a burning event for the whole 
 # level.
-signal WORLD_BURN(locations: PackedVector2Array, heats: PackedInt32Array)
+signal WORLD_BURN(locations: PackedVector2Array)
 
 # Emit this anytime an explosion happens on the scene
 signal EXPLOSION(location: Vector2, size: float, base_damage: int)

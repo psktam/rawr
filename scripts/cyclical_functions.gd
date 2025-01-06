@@ -1,5 +1,5 @@
 extends Resource
-class_name CC
+class_name TF
 
 
 var timers = {}

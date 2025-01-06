@@ -22,7 +22,7 @@ var navregion: NavigationRegion2D
 var track_button_press = false
 var time_button_pressed_s = 0.0
 var click_ticks = 0
-var tick_time_s = 0.1
+var tick_time_s = 0.125
 
 ################################################################################
 #   					 Code to manage character body motion				   #
@@ -94,9 +94,10 @@ func _process_idle(delta: float) -> void:
 		if (click_ticks * tick_time_s) < time_button_pressed_s:
 			click_ticks += 1
 			var new_fire = Fireball.instantiate()
-			new_fire.position = position
-			new_fire.target_loc = get_global_mouse_position()
-			$"/root/game/attacksGoHere".add_child(new_fire)
+			new_fire.global_position = position
+			new_fire.travel_dir = position.direction_to(get_global_mouse_position())
+			new_fire.tick_ms_on_creation = Time.get_ticks_msec()
+			$"/root/game/world/attacksGoHere".add_child(new_fire)
 
 
 # ------- walking state

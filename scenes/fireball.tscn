@@ -40,10 +40,12 @@ animations = [{
 }]
 
 [node name="fireball" type="Node2D"]
+y_sort_enabled = true
 script = ExtResource("1_ybgky")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-position = Vector2(0, -15)
+y_sort_enabled = true
 sprite_frames = SubResource("SpriteFrames_dk287")
 autoplay = "default"
 frame_progress = 0.182051
+offset = Vector2(0, -10)

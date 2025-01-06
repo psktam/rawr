@@ -196,6 +196,10 @@ func _process_pursuing(delta: float) -> void:
 	animated_sprite_2d.animation = "walk-%d" % display_direction
 	animated_sprite_2d.play()
 
+	if not target_tracker.has_target():
+		transition_to_state(State.IDLE)
+		return
+
 	var dist2_target = NPCUtils.tilemap_dist2(
 		navlayer,
 		global_position,
@@ -207,10 +211,6 @@ func _process_pursuing(delta: float) -> void:
 		1000,
 		is_new_state()
 	)
-
-	if not target_tracker.has_target():
-		transition_to_state(State.IDLE)
-		return
 
 	if inrange:
 		transition_to_state(State.ATTACKING)
@@ -269,7 +269,10 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
-	if state == State.IDLE:
+	if health <= 0 or self == null:
+		return
+
+	elif state == State.IDLE:
 		_physics_process_idle(delta)
 	elif state == State.FLEEING:
 		_physics_process_fleeing(delta)
@@ -284,11 +287,11 @@ func _physics_process(delta: float) -> void:
 
 
 func _process(delta: float) -> void:
-	if health <= 0:
+	if health <= 0 or self == null:
 		self.queue_free()
 		return
 
-	if state == State.IDLE:
+	elif state == State.IDLE:
 		_process_idle(delta)
 	elif state == State.FLEEING:
 		_process_fleeing(delta)
